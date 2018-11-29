@@ -1,0 +1,17 @@
+D:\Project\NotepadClone\bin\Debug\NotepadClone.exe.config
+D:\Project\NotepadClone\bin\Debug\NotepadClone.exe
+D:\Project\NotepadClone\bin\Debug\NotepadClone.pdb
+D:\Project\NotepadClone\obj\x86\Debug\NotepadClone.csprojResolveAssemblyReference.cache
+D:\Project\NotepadClone\obj\x86\Debug\FileDialogExtenders.FileDialogControlBase.resources
+D:\Project\NotepadClone\obj\x86\Debug\MyNotepad.Properties.Resources.resources
+D:\Project\NotepadClone\obj\x86\Debug\NotepadClone.csproj.GenerateResource.Cache
+D:\Project\NotepadClone\obj\x86\Debug\NotepadClone.exe
+D:\Project\NotepadClone\obj\x86\Debug\NotepadClone.pdb
+D:\Project\NotepadClone\obj\x86\Debug\DevPython.About.resources
+D:\Project\NotepadClone\obj\x86\Debug\DevPython.FindDialog.resources
+D:\Project\NotepadClone\obj\x86\Debug\DevPython.GoToLinePrompt.resources
+D:\Project\NotepadClone\obj\x86\Debug\DevPython.Main.resources
+D:\Project\NotepadClone\obj\x86\Debug\DevPython.SaveOpenDialog.resources
+D:\Project\NotepadClone\obj\x86\Debug\DevPython.PageSetupHeaderFooter.resources
+D:\Project\NotepadClone\obj\x86\Debug\DevPython.ReplaceDialog.resources
+D:\Project\NotepadClone\obj\x86\Debug\DevPython.SaveChangesPrompt.resources

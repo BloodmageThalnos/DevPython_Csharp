@@ -1,0 +1,17 @@
+D:\Project\NotepadClone\obj\x86\Debug\DevPython.About.resources
+D:\Project\NotepadClone\obj\x86\Debug\FileDialogExtenders.FileDialogControlBase.resources
+D:\Project\NotepadClone\obj\x86\Debug\DevPython.FindDialog.resources
+D:\Project\NotepadClone\obj\x86\Debug\DevPython.GoToLinePrompt.resources
+D:\Project\NotepadClone\obj\x86\Debug\DevPython.Main.resources
+D:\Project\NotepadClone\obj\x86\Debug\DevPython.SaveOpenDialog.resources
+D:\Project\NotepadClone\obj\x86\Debug\DevPython.PageSetupHeaderFooter.resources
+D:\Project\NotepadClone\obj\x86\Debug\DevPython.ReplaceDialog.resources
+D:\Project\NotepadClone\obj\x86\Debug\DevPython.SaveChangesPrompt.resources
+D:\Project\NotepadClone\obj\x86\Debug\DevPython.csproj.GenerateResource.Cache
+D:\Project\NotepadClone\obj\x86\Debug\DevPython.csprojResolveAssemblyReference.cache
+D:\Project\NotepadClone\bin\Debug\DevPython.exe.config
+D:\Project\NotepadClone\bin\Debug\DevPython.exe
+D:\Project\NotepadClone\bin\Debug\DevPython.pdb
+D:\Project\NotepadClone\obj\x86\Debug\DevPython.Properties.Resources.resources
+D:\Project\NotepadClone\obj\x86\Debug\DevPython.exe
+D:\Project\NotepadClone\obj\x86\Debug\DevPython.pdb
