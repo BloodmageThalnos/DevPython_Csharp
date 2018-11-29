@@ -1,12 +1,9 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="MyNotepad.Properties" GeneratedClassName="Settings">
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="DevPython.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
     <Setting Name="CurrentFont" Type="System.Drawing.Font" Scope="User">
-      <Value Profile="(Default)">Lucida Console, 9.75pt</Value>
-    </Setting>
-    <Setting Name="IsStatusBarVisible" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">True</Value>
+      <Value Profile="(Default)">Lucida Console, 11pt</Value>
     </Setting>
     <Setting Name="WindowPosition" Type="System.Drawing.Rectangle" Scope="User">
       <Value Profile="(Default)">0, 0, 0, 0</Value>
@@ -16,6 +13,9 @@
     </Setting>
     <Setting Name="Footer" Type="System.String" Scope="User">
       <Value Profile="(Default)">Page &amp;p</Value>
+    </Setting>
+    <Setting Name="IsStatusBarVisible" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
     </Setting>
   </Settings>
 </SettingsFile>

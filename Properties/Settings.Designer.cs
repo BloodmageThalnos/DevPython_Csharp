@@ -25,25 +25,13 @@ namespace DevPython.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Lucida Console, 9.75pt")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Lucida Console, 11pt")]
         public global::System.Drawing.Font CurrentFont {
             get {
                 return ((global::System.Drawing.Font)(this["CurrentFont"]));
             }
             set {
                 this["CurrentFont"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool IsStatusBarVisible {
-            get {
-                return ((bool)(this["IsStatusBarVisible"]));
-            }
-            set {
-                this["IsStatusBarVisible"] = value;
             }
         }
         
@@ -80,6 +68,18 @@ namespace DevPython.Properties {
             }
             set {
                 this["Footer"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool IsStatusBarVisible {
+            get {
+                return ((bool)(this["IsStatusBarVisible"]));
+            }
+            set {
+                this["IsStatusBarVisible"] = value;
             }
         }
     }

@@ -18,7 +18,7 @@ namespace DevPython {
         }
 
         private void controlSimplyGoodCodeLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) {
-            System.Diagnostics.Process.Start("http://simplygoodcode.com");
+            System.Diagnostics.Process.Start("https://github.com/BloodmageThalnos/DevPython_Csharp");
         }
     }
 }
