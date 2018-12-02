@@ -237,7 +237,9 @@ Do you want to create a new file?
 
             #endregion
 
-            Content = ReadAllText(Filename, encoding);
+            // Content = ReadAllText(Filename, encoding);
+
+            LoadDataFromFile(Filename);
             SelectionStart = 0;
             this.Filename = Filename;
             IsDirty = false;

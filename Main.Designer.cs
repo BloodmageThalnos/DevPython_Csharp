@@ -610,7 +610,7 @@ namespace DevPython {
 
                         string path = a.GetValue(0).ToString();
 
-                        LoadDataFromFile(path);
+                        Open(path);
 
                     }
                 }
