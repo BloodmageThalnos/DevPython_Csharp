@@ -16,6 +16,8 @@ namespace DevPython {
         public Main() {
             InitializeComponent();
 
+            InitializeTextarea();
+
             if (!Settings.WindowPosition.IsEmpty) {
                 Bounds = Settings.WindowPosition;
                 StartPosition = FormStartPosition.Manual;
@@ -60,8 +62,8 @@ namespace DevPython {
         }
 
         public string Content {
-            get { return controlContentTextBox.Text; }
-            set { controlContentTextBox.Text = value; }
+            get { return sciTextArea.Text; }
+            set { sciTextArea.Text = value; }
         }
 
         private void controlContentTextBox_TextChanged(object sender, EventArgs e) {
@@ -73,7 +75,7 @@ namespace DevPython {
             menuitemFormatWordWrap.Checked = controlContentTextBox.WordWrap;
             CurrentFont = Settings.CurrentFont;
             UpdateStatusBar();
-            menuitemViewStatusBar.Checked = controlStatusBar.Visible = Settings.IsStatusBarVisible;
+            //menuitemViewStatusBar.Checked = controlStatusBar.Visible = Settings.IsStatusBarVisible;
             controlContentTextBox.BringToFront(); // in order to docking to respond correctly to the status bar being turned off and on
         }
 
@@ -82,7 +84,7 @@ namespace DevPython {
                 return Settings.IsStatusBarVisible;
             }
             set {
-                menuitemViewStatusBar.Checked = controlStatusBar.Visible = Settings.IsStatusBarVisible = value;
+                //menuitemViewStatusBar.Checked = controlStatusBar.Visible = Settings.IsStatusBarVisible = value;
                 Settings.Save();
             }
         }
@@ -779,6 +781,16 @@ Do you want to create a new file?
         private void controlContentTextBox_MouseDown(object sender, MouseEventArgs e)
         {
             UpdateStatusBar();
+        }
+        
+        private void runToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Compiler.run(Content);
+        }
+
+        private void toolStripButton1_Click(object sender, EventArgs e)
+        {
+            Compiler.run(Content);
         }
     }
 }

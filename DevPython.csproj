@@ -60,6 +60,9 @@
     <ApplicationIcon>icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ScintillaNET">
+      <HintPath>..\ScintillaNET-Kitchen\packages\jacobslusser.ScintillaNET.3.5.10\lib\net40\ScintillaNET.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -78,6 +81,7 @@
     <Compile Include="About.Designer.cs">
       <DependentUpon>About.cs</DependentUpon>
     </Compile>
+    <Compile Include="Compiler.cs" />
     <Compile Include="CONST.cs" />
     <Compile Include="FileDlgExtenders_v10\Enums.cs" />
     <Compile Include="FileDlgExtenders_v10\Extensions.cs" />
@@ -188,7 +192,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\Icon1.ico" />
     <None Include="BigIcon.png" />
+    <None Include="doc\1.jpg" />
     <Content Include="icon.ico" />
   </ItemGroup>
   <ItemGroup>

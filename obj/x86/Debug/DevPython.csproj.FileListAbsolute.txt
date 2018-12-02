@@ -32,3 +32,5 @@ D:\Project\DevPython\obj\x86\Debug\DevPython.Properties.Resources.resources
 D:\Project\DevPython\bin\Debug\DevPython.exe.config
 D:\Project\DevPython\bin\Debug\DevPython.exe
 D:\Project\DevPython\bin\Debug\DevPython.pdb
+D:\Project\DevPython\bin\Debug\ScintillaNET.dll
+D:\Project\DevPython\bin\Debug\ScintillaNET.xml
