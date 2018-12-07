@@ -72,7 +72,6 @@ namespace DevPython {
 
         private void Main_Load(object sender, EventArgs e) {
             UpdateTitle();
-            menuitemFormatWordWrap.Checked = controlContentTextBox.WordWrap;
             CurrentFont = Settings.CurrentFont;
             UpdateStatusBar();
             //menuitemViewStatusBar.Checked = controlStatusBar.Visible = Settings.IsStatusBarVisible;
@@ -87,24 +86,6 @@ namespace DevPython {
                 //menuitemViewStatusBar.Checked = controlStatusBar.Visible = Settings.IsStatusBarVisible = value;
                 Settings.Save();
             }
-        }
-
-        public bool WordWrap {
-            get { 
-                return controlContentTextBox.WordWrap; 
-            }
-            set {
-                menuitemFormatWordWrap.Checked = controlContentTextBox.WordWrap = value; 
-            }
-        }
-
-        private void menuitemFormatWordWrap_Click(object sender, EventArgs e) {
-            WordWrap = !WordWrap;
-        }
-
-        private void menuitemFormatWordWrap_CheckedChanged(object sender, EventArgs e) {
-            var Sender = (ToolStripMenuItem)sender;
-            WordWrap = Sender.Checked;
         }
 
         private static Properties.Settings Settings {
@@ -503,25 +484,20 @@ Do you want to create a new file?
             }
             return HeaderOrFooterInfo;
         }
-
-        private void menuitemFileExit_Click(object sender, EventArgs e) {
-            Close();
-        }
-
         private void menuitemEditUndo_Click(object sender, EventArgs e) {
-            controlContentTextBox.Undo();
+            sciTextArea.Undo();
         }
 
         private void menuitemEditCut_Click(object sender, EventArgs e) {
-            controlContentTextBox.Cut();
+            sciTextArea.Cut();
         }
 
         private void menuitemEditCopy_Click(object sender, EventArgs e) {
-            controlContentTextBox.Copy();
+            sciTextArea.Copy();
         }
 
         private void menuitemEditPaste_Click(object sender, EventArgs e) {
-            controlContentTextBox.Paste();
+            sciTextArea.Paste();
         }
 
         private void menuitemEditDelete_Click(object sender, EventArgs e) {
@@ -533,15 +509,15 @@ Do you want to create a new file?
         }
 
         public string SelectedText {
-            get { return controlContentTextBox.SelectedText; }
+            get { return sciTextArea.SelectedText; }
             set {
-                controlContentTextBox.SelectedText = value;
+                // sciTextArea.SelectedText = value;
                 IsDirty = true;
             }
         }
 
         private void menuitemEditSelectAll_Click(object sender, EventArgs e) {
-            controlContentTextBox.SelectAll();
+            sciTextArea.SelectAll();
         }
 
         private void menuitemEditTimeDate_Click(object sender, EventArgs e) {
@@ -579,11 +555,13 @@ Do you want to create a new file?
         private ContentPosition CharIndexToPosition(int pCharIndex) {
             var CurrentCharIndex = 0;
 
-            if (controlContentTextBox.Lines.Length == 0 && CurrentCharIndex == 0) return new ContentPosition { LineIndex = 0, ColumnIndex = 0 };
+            //if (sciTextArea.Lines.Count == 0)
+            return new ContentPosition { LineIndex = 0, ColumnIndex = 0 };
+            // TODO: bug here.
 
             for (var CurrentLineIndex = 0; CurrentLineIndex < controlContentTextBox.Lines.Length; CurrentLineIndex++) {
                 var LineStartCharIndex = CurrentCharIndex;
-                var Line = controlContentTextBox.Lines[CurrentLineIndex];
+                var Line = sciTextArea.Lines[CurrentLineIndex];
                 var LineEndCharIndex = LineStartCharIndex + Line.Length + 1;
 
                 if (pCharIndex >= LineStartCharIndex && pCharIndex <= LineEndCharIndex) {
@@ -591,7 +569,7 @@ Do you want to create a new file?
                     return new ContentPosition { LineIndex = CurrentLineIndex, ColumnIndex = ColumnIndex };
                 }
 
-                CurrentCharIndex += controlContentTextBox.Lines[CurrentLineIndex].Length + Environment.NewLine.Length;
+                CurrentCharIndex += sciTextArea.Lines[CurrentLineIndex].Length + Environment.NewLine.Length;
             }
 
             return null;
@@ -640,16 +618,17 @@ Do you want to create a new file?
 
 
         public int SelectionStart {
-            get { return controlContentTextBox.SelectionStart; }
-            set { 
-                controlContentTextBox.SelectionStart = value;
-                controlContentTextBox.ScrollToCaret();
+            get { return sciTextArea.SelectionStart; }
+            set {
+                sciTextArea.SelectionStart = value;
+                sciTextArea.ScrollCaret();
             }
         }
 
         public int SelectionLength {
-            get { return controlContentTextBox.SelectionLength; }
-            set { controlContentTextBox.SelectionLength = value; }
+            get { return sciTextArea.SelectionEnd - sciTextArea.SelectionStart + 1; }
+            set { //controlContentTextBox.SelectionLength = value; 
+            }
         }
 
         private void menuitemAbout_Click(object sender, EventArgs e) {
@@ -670,8 +649,7 @@ Do you want to create a new file?
 
         private void menuitemEdit_DropDownOpening(object sender, EventArgs e) {
             menuitemEditCut.Enabled =
-                menuitemEditCopy.Enabled =
-                menuitemEditDelete.Enabled = (SelectionLength > 0);
+                menuitemEditCopy.Enabled = (SelectionLength > 0);
 
             menuitemEditFind.Enabled =
                 menuitemEditFindNext.Enabled = (Content.Length > 0);
@@ -793,6 +771,11 @@ Do you want to create a new file?
         private void toolStripButton1_Click(object sender, EventArgs e)
         {
             Compiler.run(Content);
+        }
+
+        private void menuitemFileExit_Click(object sender, EventArgs e)
+        {
+            Close();
         }
     }
 }
