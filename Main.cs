@@ -23,6 +23,13 @@ namespace DevPython {
                 StartPosition = FormStartPosition.Manual;
             }
         }
+        
+        public void printLog(String S)
+        {
+            sciLogArea.Text += S + '\n';
+            sciLogArea.SelectionStart = sciLogArea.TextLength - 1;
+            sciLogArea.ScrollCaret();
+        }
 
         private Encoding _encoding = Encoding.ASCII;
 
@@ -765,12 +772,12 @@ Do you want to create a new file?
         
         private void runToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Compiler.run(Content);
+            Compiler.run(Content, this);
         }
 
         private void toolStripButton1_Click(object sender, EventArgs e)
         {
-            Compiler.run(Content);
+            Compiler.run(Content, this);
         }
 
         private void menuitemFileExit_Click(object sender, EventArgs e)
