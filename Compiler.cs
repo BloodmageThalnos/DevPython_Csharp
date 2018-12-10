@@ -369,7 +369,7 @@ namespace DevPython
                         int nonzero = 0;
                         /* maybe old-style octal; c is first char of it */
                         /* in any case, allow '0' as a literal */
-                        for(;;)
+                        for (;;)
                         {
                             if (c == '_')
                             {
@@ -684,11 +684,13 @@ namespace DevPython
         }
 
         #region PRIVATE_FUNCTIONS
-        bool is_potential_identifier_start(int c) {
+        bool is_potential_identifier_start(int c)
+        {
             return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c == '_' || (c >= 128);
         }
 
-        bool is_potential_identifier_char(int c) {
+        bool is_potential_identifier_char(int c)
+        {
             return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9') || c == '_' || (c >= 128);
         }
 
@@ -708,10 +710,10 @@ namespace DevPython
                 return _buf[cur++]; /* Fast path */
             if (done != E_OK)
                 return EOF;
-            while (++end<_buf.Length)
-                if(_buf[end] == '\n')
+            while (++end < _buf.Length)
+                if (_buf[end] == '\n')
                 {
-                    if(start == 0) buf = cur;
+                    if (start == 0) buf = cur;
                     line_start = cur;
                     inp = end;
                     lineno++;
@@ -729,15 +731,19 @@ namespace DevPython
         int decimal_tail()
         {
             int c;
-            for(;;) {
-                do {
+            for (;;)
+            {
+                do
+                {
                     c = nextc();
                 } while (is_digit(c));
-                if (c != '_') {
+                if (c != '_')
+                {
                     break;
                 }
                 c = nextc();
-                if (!is_digit(c)) {
+                if (!is_digit(c))
+                {
                     done = E_TOKEN;
                     backup(c);
                     return 0;
@@ -1084,73 +1090,15 @@ namespace DevPython
 
     class Parser
     {
-        stack p_stack;       /* Stack of parser states */
-        grammar p_grammar;   /* Grammar to use */
-        _node p_tree;        /* Top of parse tree */
+        Grammar.stack p_stack;       /* Stack of parser states */
+        Grammar.grammar p_grammar;   /* Grammar to use */
+        Grammar._node p_tree;        /* Top of parse tree */
 
         public Parser()
         {
 
         }
 
-        
-
-        #region SOME_DEFINITIONS
-        struct label {
-            int lb_type;
-            String lb_str;
-        };
-        const int EMPTY = 0; 
-        /* A list of labels */
-        class labellist {
-            int ll_nlabels;
-            label[] ll_label;
-        };
-        /* An arc from one state to another */
-        struct arc {
-            short a_lbl;          /* Label of this arc */
-            short a_arrow;        /* State where this arc goes to */
-        };
-        /* A state in a DFA */
-        class state {
-            int s_narcs;
-            arc[] s_arc;         /* Array of arcs */
-        };
-        /* A DFA */
-        class dfa {
-            int d_type;        /* Non-terminal this represents */
-            String d_name;     /* For printing */
-            int d_initial;     /* Initial state */
-            int d_nstates;
-            state[] d_state;   /* Array of states */
-            // bitset d_first;
-        };
-        /* A grammar */
-        class grammar {
-            int g_ndfas;
-            dfa[] g_dfa;       /* Array of DFAs */
-            labellist g_ll;
-            int g_start;       /* Start symbol of the grammar */
-            int g_accel;       /* Set if accelerators present */
-        };
-        class _node {
-            short n_type;
-            String n_str;
-            int n_lineno;
-            int n_col_offset;
-            int n_nchildren;
-            _node[] n_child;
-        };
-        class stackentry {
-            int s_state;       /* State in current DFA */
-            dfa s_dfa;         /* Current DFA */
-            _node s_parent;    /* Where to add next node */
-        }
-        class stack {
-            stackentry s_top;       /* Top entry */
-            stackentry[] s_base;    /* Array of stack entries */
-        }
-        #endregion
     }
 
     class Compiler
@@ -1159,11 +1107,11 @@ namespace DevPython
         {
             S += '\n';
             Tokenizer t = new Tokenizer(S);
-            while(t.ok())
+            while (t.ok())
             {
                 String p;
                 int j = t.get(out p);
-                M.printLog(Tokenizer._TokenNames[j] + "  "+ p);
+                M.printLog(Tokenizer._TokenNames[j] + "  " + p);
             }
         }
 

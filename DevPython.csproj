@@ -108,6 +108,7 @@
     <Compile Include="GoToLinePrompt.Designer.cs">
       <DependentUpon>GoToLinePrompt.cs</DependentUpon>
     </Compile>
+    <Compile Include="Grammar.cs" />
     <Compile Include="Helper.cs" />
     <Compile Include="HelperExtensions.cs" />
     <Compile Include="Main.cs">
