@@ -1090,15 +1090,193 @@ namespace DevPython
 
     class Parser
     {
-        Grammar.stack p_stack;       /* Stack of parser states */
-        Grammar.grammar p_grammar;   /* Grammar to use */
-        Grammar._node p_tree;        /* Top of parse tree */
+        stack p_stack;       /* Stack of parser states */
+        grammar p_grammar;   /* Grammar to use */
+        _node p_tree;        /* Top of parse tree */
 
-        public Parser()
+        public Parser(grammar _grammar, short start)
         {
-
+            p_grammar = _grammar;
+            if (p_grammar.g_accel == 0)
+                p_grammar.addAccelerators();
+            p_tree = new _node(start);
+            p_stack = new stack();
+            p_stack.reset();
+            p_stack.push(p_grammar.findDFA(start), p_tree);
         }
 
+        int classify(int type, String str)
+        {
+            grammar g = p_grammar;
+            int n = g.g_ll.ll_nlabels;
+            if(type == NAME)
+            for (int i = 0; i < n; i++)
+            {
+                label l = g.g_ll.ll_label[i];
+                if (l.lb_type == NAME && l.lb_str.Equals(str))
+                    return i;
+            }
+            for (int i = 0; i < n; i++)
+            {
+                label l = g.g_ll.ll_label[i];
+                if (l.lb_type != type && l.lb_str.Equals(""))
+                    return i;
+            }
+            return -1; // Illegal token
+        }
+
+        public int addToken(int type, String str, int lineno, int col_offset) // expected_ret
+        {
+            int ilabel = classify(type, str) , err;
+            if (ilabel < 0)
+                return E_SYNTAX;
+            /* Loop until the token is shifted or an error occurred */
+            for (;;)
+            {
+                /* Fetch the current dfa and state */
+                dfa d = p_stack.s_top.s_dfa;
+                state s = d.d_state[p_stack.s_top.s_state];
+
+                /* Check accelerator */
+                if (s.s_lower <= ilabel && ilabel < s.s_upper)
+                {
+                    int x = s.s_accel[ilabel - s.s_lower];
+                    if (x != -1)
+                    {
+                        if ((x & (1 << 7))!=0)
+                        {
+                            /* Push non-terminal */
+                            int nt = (x >> 8) + 256;
+                            int arrow = x & ((1 << 7) - 1);
+                            dfa d1 = p_grammar.findDFA(nt);
+                            if ((err = p_stack.doPush(nt, d1, arrow, lineno, col_offset)) > 0)
+                                return err;
+                            continue;
+                        }
+
+                        /* Shift the token */
+                        if ((err = p_stack.doShift(type, str,
+                                        x, lineno, col_offset)) > 0)
+                            return err;
+
+                        /* Pop while we are in an accept-only state */
+                        while (s = &d->d_state[ps->p_stack.s_top->s_state],
+                            s->s_accept && s->s_narcs == 1) {
+                            s_pop(&ps->p_stack);
+                            if (s_empty(&ps->p_stack))
+                            {
+                                return E_DONE;
+                            }
+                            d = ps->p_stack.s_top->s_dfa;
+                        }
+                        return E_OK;
+                    }
+                }
+
+                if (s->s_accept) {
+                    /* Pop this dfa and try again */
+                    s_pop(&ps->p_stack);
+                    D(printf(" Pop ...\n"));
+                    if (s_empty(&ps->p_stack)) {
+                        return E_SYNTAX;
+                    }
+                    continue;
+                }
+
+                /* Stuck, report syntax error */
+                if (expected_ret) {
+                    if (s->s_lower == s->s_upper - 1) {
+                        /* Only one possible expected token */
+                        * expected_ret = ps->p_grammar->
+                            g_ll.ll_label[s->s_lower].lb_type;
+                    }
+                    else
+                        * expected_ret = -1;
+                }
+                return E_SYNTAX;
+            }
+        }
+
+        #region SOME_CONSTANTS
+        const int EOF = -1;
+        const int ENDMARKER = 0;
+        const int NAME = 1;
+        const int NUMBER = 2;
+        const int STRING = 3;
+        const int NEWLINE = 4;
+        const int INDENT = 5;
+        const int DEDENT = 6;
+        const int LPAR = 7;
+        const int RPAR = 8;
+        const int LSQB = 9;
+        const int RSQB = 10;
+        const int COLON = 11;
+        const int COMMA = 12;
+        const int SEMI = 13;
+        const int PLUS = 14;
+        const int MINUS = 15;
+        const int STAR = 16;
+        const int SLASH = 17;
+        const int VBAR = 18;
+        const int AMPER = 19;
+        const int LESS = 20;
+        const int GREATER = 21;
+        const int EQUAL = 22;
+        const int DOT = 23;
+        const int PERCENT = 24;
+        const int LBRACE = 25;
+        const int RBRACE = 26;
+        const int EQEQUAL = 27;
+        const int NOTEQUAL = 28;
+        const int LESSEQUAL = 29;
+        const int GREATEREQUAL = 30;
+        const int TILDE = 31;
+        const int CIRCUMFLEX = 32;
+        const int LEFTSHIFT = 33;
+        const int RIGHTSHIFT = 34;
+        const int DOUBLESTAR = 35;
+        const int PLUSEQUAL = 36;
+        const int MINEQUAL = 37;
+        const int STAREQUAL = 38;
+        const int SLASHEQUAL = 39;
+        const int PERCENTEQUAL = 40;
+        const int AMPEREQUAL = 41;
+        const int VBAREQUAL = 42;
+        const int CIRCUMFLEXEQUAL = 43;
+        const int LEFTSHIFTEQUAL = 44;
+        const int RIGHTSHIFTEQUAL = 45;
+        const int DOUBLESTAREQUAL = 46;
+        const int DOUBLESLASH = 47;
+        const int DOUBLESLASHEQUAL = 48;
+        const int AT = 49;
+        const int ATEQUAL = 50;
+        const int RARROW = 51;
+        const int ELLIPSIS = 52;
+        const int OP = 53;
+        const int ERRORTOKEN = 54;
+        const int COMMENT = 55;
+        const int NL = 56;
+        const int ENCODING = 57;
+        const int N_TOKENS = 58;
+        const int E_OK = 10;      /* No error */
+        const int E_EOF = 11;      /* End Of File */
+        const int E_INTR = 12;      /* Interrupted */
+        const int E_TOKEN = 13;      /* Bad token */
+        const int E_SYNTAX = 14;      /* Syntax error */
+        const int E_NOMEM = 15;      /* Ran out of memory */
+        const int E_DONE = 16;      /* Parsing complete */
+        const int E_ERROR = 17;      /* Execution error */
+        const int E_TABSPACE = 18;      /* Inconsistent mixing of tabs and spaces */
+        const int E_OVERFLOW = 19;      /* Node had too many children */
+        const int E_TOODEEP = 20;      /* Too many indentation levels */
+        const int E_DEDENT = 21;      /* No matching outer block for dedent */
+        const int E_DECODE = 22;      /* Error in decoding into Unicode */
+        const int E_EOFS = 23;      /* EOF in triple-quoted string */
+        const int E_EOLS = 24;      /* EOL in single-quoted string */
+        const int E_LINECONT = 25;      /* Unexpected characters after a line continuation */
+        const int E_IDENTIFIER = 26;     /* Invalid characters in identifier */
+        const int E_BADSINGLE = 27;      /* Ill-formed single statement input */
+        #endregion
     }
 
     class Compiler

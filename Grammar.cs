@@ -1,15 +1,252 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
 namespace DevPython
 {
+    public struct label
+    {
+        public label(int a, String b) { lb_type = a; lb_str = b; }
+        public int lb_type;
+        public String lb_str;
+    };
+
+    /* A list of labels */
+    public struct labellist
+    {
+        public int ll_nlabels;
+        public label[] ll_label;
+    };
+
+    /* An arc from one state to another */
+    public struct arc
+    {
+        public arc(short a, short b) { a_lbl = a; a_arrow = b; }
+        public short a_lbl;          /* Label of this arc */
+        public short a_arrow;        /* State where this arc goes to */
+    };
+
+    /* A state in a DFA */
+    public class state
+    {
+        public state(int a, arc[] b) { s_narcs = a; s_arc = b; }
+        public int s_narcs;
+        public arc[] s_arc;         /* Array of arcs */
+                                    /* Optional accelerators */
+        public int s_lower;       /* Lowest label index */
+        public int s_upper;       /* Highest label index */
+        public int[] s_accel;       /* Accelerator */
+        public int s_accept;      /* Nonzero for accepting state */
+    };
+
+    /* A DFA */
+    public class dfa
+    {
+        public int d_type;        /* Non-terminal this represents */
+        public String d_name;     /* For printing */
+        public int d_initial;     /* Initial state */
+        public int d_nstates;
+        public state[] d_state;   /* Array of states */
+        public byte[] d_first;
+
+        public dfa(int a, String b, int c, int d, state[] e, String f)
+        {
+            d_type = a;
+            d_name = b;
+            d_initial = c;
+            d_nstates = d;
+            d_state = e;
+            d_first = new byte[23];
+            for (int i = 0; i < 23; i++)
+                d_first[i] = (byte)((f[i * 3] - '0') * 64 + (f[i * 3 + 1] - '0') * 8 + (f[i * 3 + 2] - '0'));
+        }
+    };
+
+    /* A grammar */
+    public class grammar
+    {
+        public int g_ndfas;
+        public dfa[] g_dfa;       /* Array of DFAs */
+        public labellist g_ll;
+        public int g_start;       /* Start symbol of the grammar */
+        public int g_accel;       /* Set if accelerators present */
+
+        public void addAccelerators()
+        {
+            g_accel = 1;
+            for (int i = 0; i < g_ndfas; i++)
+            {
+                _fixdfa(g_dfa[i]);
+            }
+        }
+        void _fixdfa(dfa d)
+        {
+            for (int i = 0; i < d.d_nstates; i++)
+            {
+                _fixstate(d.d_state[i]);
+            }
+        }
+        void _fixstate(state s)
+        {
+            int k;
+            int nl = g_ll.ll_nlabels;
+            s.s_accept = 0;
+            int[] accel = new int[nl];
+            for (k = 0; k < nl; k++)
+                accel[k] = -1;
+            for (k = s.s_narcs; --k >= 0;)
+            {
+                arc a = s.s_arc[s.s_narcs - k];
+                int lbl = a.a_lbl;
+                label l = g_ll.ll_label[lbl];
+                int type = l.lb_type;
+                /*if (a.a_arrow >= (1 << 7))
+                {
+                    printf("XXX too many states!\n");
+                    continue;
+                }*/
+                if (type >= 256)
+                {
+                    dfa d1 = g_dfa[type - 256];
+                    /*if (type - NT_OFFSET >= (1 << 7))
+                    {
+                        printf("XXX too high nonterminal number!\n");
+                        continue;
+                    }*/
+                    for (int ibit = 0; ibit < g_ll.ll_nlabels; ibit++)
+                    {
+                        if ((d1.d_first[ibit / 8] & (1 << (ibit % 8))) > 0)
+                        {
+                            /*if (accel[ibit] != -1)
+                                printf("XXX ambiguity!\n");*/
+                            accel[ibit] = a.a_arrow | (1 << 7) |
+                                ((type - 256) << 8);
+                        }
+                    }
+                }
+                else if (lbl == 0)
+                    s.s_accept = 1;
+                else if (lbl >= 0 && lbl < nl)
+                    accel[lbl] = a.a_arrow;
+            }
+            while (nl > 0 && accel[nl - 1] == -1)
+                nl--;
+            for (k = 0; k < nl && accel[k] == -1;)
+                k++;
+            if (k < nl)
+            {
+                s.s_accel = new int[nl - k];
+                s.s_lower = k;
+                s.s_upper = nl;
+                for (int i = 0; k < nl; i++, k++)
+                    s.s_accel[i] = accel[k];
+            }
+        }
+        public dfa findDFA(int type)
+        {
+            dfa d = g_dfa[type - 256];
+            Debug.Assert(d.d_type == type);
+            return d;
+        }
+    };
+
+    public class _node
+    {
+        public short n_type;
+        public String n_str;
+        public int n_lineno;
+        public int n_col_offset;
+        public int n_nchildren;
+        public _node[] n_child;
+        
+        public _node(short t=0)
+        {
+            n_type = t;
+        }
+        public int addChild(int type, String str, int lineno, int col_offset)
+        {
+            return 0;
+        }
+    };
+
+    public class stackentry
+    {
+        public int s_state;       /* State in current DFA */
+        public dfa s_dfa;         /* Current DFA */
+        public _node s_parent;    /* Where to add next node */
+    }
+
+    public class stack
+    {
+        public int __s_top;       /* Top entry */
+        public stackentry s_top
+        {
+            get { return s_base[__s_top]; }
+            set { s_base[__s_top] = value; }
+        }
+        public stackentry[] s_base;    /* Array of stack entries */
+        public stack()
+        {
+            s_base = new stackentry[MAXSTACK];
+        }
+        public void reset()
+        {
+            __s_top = MAXSTACK;
+        }
+        public int push(dfa d, _node parent)
+        {
+            if (__s_top == 0)
+                return -1;// Stack overflow!!
+            __s_top--;
+            s_top.s_dfa = d;
+            s_top.s_parent = parent;
+            s_top.s_state = 0;
+            return 0;
+        }
+        public bool empty()
+        {
+            return __s_top == MAXSTACK;
+        }
+        public void pop()
+        {
+            __s_top++;
+        }
+        public int doPush(int type, dfa d, int newstate, int lineno, int col_offset)
+        {
+            _node n = s_top.s_parent;
+            Debug.Assert(!empty());
+            int err = n.addChild(type, "", lineno, col_offset);
+            if (err != 0) return err;
+            s_top.s_state = newstate;
+            return push(d, n.n_child[n.n_nchildren - 1]);
+        }
+        public int doShift(int type, String str, int newstate, int lineno, int col_offset)
+        {
+            Debug.Assert(!empty());
+            int err = s_top.s_parent.addChild(type, str, lineno, col_offset);
+            if (err)
+                return err;
+            s->s_top->s_state = newstate;
+            return 0;
+        }
+        static int MAXSTACK = 2048;
+    }
+
     class Grammar
     {
-
         #region DFA_CONSTANTS
 
+        static Grammar() {
+            _Grammar = new grammar();
+            _Grammar.g_ndfas = 87;
+            _Grammar.g_dfa = dfas;
+            _Grammar.g_ll = new labellist();
+            _Grammar.g_ll.ll_nlabels = 177;
+            _Grammar.g_ll.ll_label = labels;
+            _Grammar.g_start = 256;
+        }
         static arc[] arcs_0_0 = {
     new arc(2,1),
     new arc(3,1),
@@ -2277,91 +2514,6 @@ namespace DevPython
         };
         public static grammar _Grammar;
 
-        #endregion
-
-        #region SOME_DEFINITIONS
-        public struct label
-        {
-            public label(int a, String b) { lb_type = a; lb_str = b; }
-            int lb_type;
-            String lb_str;
-        };
-        const int EMPTY = 0;
-        /* A list of labels */
-        public class labellist
-        {
-            int ll_nlabels;
-            label[] ll_label;
-        };
-        /* An arc from one state to another */
-        public struct arc
-        {
-            public arc(short a, short b) { a_lbl = a; a_arrow = b; }
-            short a_lbl;          /* Label of this arc */
-            short a_arrow;        /* State where this arc goes to */
-        };
-        /* A state in a DFA */
-        public class state
-        {
-            public state(int a, arc[] b) { s_narcs = a; s_arc = b; }
-            int s_narcs;
-            arc[] s_arc;         /* Array of arcs */
-            /* Optional accelerators */
-            int s_lower;       /* Lowest label index */
-            int s_upper;       /* Highest label index */
-            int[] s_accel;       /* Accelerator */
-            int s_accept;      /* Nonzero for accepting state */
-        };
-        /* A DFA */
-        public class dfa
-        {
-            public dfa(int a, String b, int c, int d, state[] e, String f)
-            {
-                d_type = a;
-                d_name = b;
-                d_initial = c;
-                d_nstates = d;
-                d_state = e;
-                d_first = new byte[23];
-                for (int i = 0; i < 23; i++)
-                    d_first[i] = (byte)((f[i * 3] - '0') * 64 + (f[i * 3 + 1] - '0') * 8 + (f[i * 3 + 2] - '0'));
-            }
-            int d_type;        /* Non-terminal this represents */
-            String d_name;     /* For printing */
-            int d_initial;     /* Initial state */
-            int d_nstates;
-            state[] d_state;   /* Array of states */
-            byte[] d_first;
-        };
-        /* A grammar */
-        public class grammar
-        {
-            int g_ndfas;
-            dfa[] g_dfa;       /* Array of DFAs */
-            labellist g_ll;
-            int g_start;       /* Start symbol of the grammar */
-            int g_accel;       /* Set if accelerators present */
-        };
-        public class _node
-        {
-            short n_type;
-            String n_str;
-            int n_lineno;
-            int n_col_offset;
-            int n_nchildren;
-            _node[] n_child;
-        };
-        public class stackentry
-        {
-            int s_state;       /* State in current DFA */
-            dfa s_dfa;         /* Current DFA */
-            _node s_parent;    /* Where to add next node */
-        }
-        public class stack
-        {
-            stackentry s_top;       /* Top entry */
-            stackentry[] s_base;    /* Array of stack entries */
-        }
         #endregion
     }
 }

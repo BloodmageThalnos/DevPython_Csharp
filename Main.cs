@@ -31,6 +31,23 @@ namespace DevPython {
             sciLogArea.ScrollCaret();
         }
 
+        public void clearLog()
+        {
+            sciLogArea.Text = "";
+        }
+
+        public void printOutput(String S)
+        {
+            sciOutputArea.Text += S + '\n';
+            sciOutputArea.SelectionStart = sciOutputArea.TextLength - 1;
+            sciOutputArea.ScrollCaret();
+        }
+
+        public void clearOutput()
+        {
+            sciOutputArea.Text = "";
+        }
+
         private Encoding _encoding = Encoding.ASCII;
 
         private string _Filename;
