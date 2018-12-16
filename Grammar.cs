@@ -98,7 +98,7 @@ namespace DevPython
                 accel[k] = -1;
             for (k = s.s_narcs; --k >= 0;)
             {
-                arc a = s.s_arc[s.s_narcs - k];
+                arc a = s.s_arc[s.s_narcs - k - 1];
                 int lbl = a.a_lbl;
                 label l = g_ll.ll_label[lbl];
                 int type = l.lb_type;
@@ -200,6 +200,7 @@ namespace DevPython
             if (__s_top == 0)
                 return -1;// Stack overflow!!
             __s_top--;
+            s_top = new stackentry();
             s_top.s_dfa = d;
             s_top.s_parent = parent;
             s_top.s_state = 0;
@@ -226,9 +227,9 @@ namespace DevPython
         {
             Debug.Assert(!empty());
             int err = s_top.s_parent.addChild(type, str, lineno, col_offset);
-            if (err)
+            if (err != 0)
                 return err;
-            s->s_top->s_state = newstate;
+            s_top.s_state = newstate;
             return 0;
         }
         static int MAXSTACK = 2048;

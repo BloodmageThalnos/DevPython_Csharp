@@ -8,20 +8,20 @@ namespace DevPython
     {
         #region PRIVATE_VARIABLES
         String _buf;
-        int buf;
-        int cur;
-        int inp;
-        int start;
-        int end;
-        int line_start;
-        int done;
-        int indent;
-        int[] indstack;
-        bool atbol;
-        int pendin;
-        int lineno;
-        int level;
-        int cont_line;
+        public int buf;
+        public int cur;
+        public int inp;
+        public int start;
+        public int end;
+        public int line_start;
+        public int done;
+        public int indent;
+        public int[] indstack;
+        public bool atbol;
+        public int pendin;
+        public int lineno;
+        public int level;
+        public int cont_line;
         #endregion
 
         public Tokenizer(String input)
@@ -1090,9 +1090,9 @@ namespace DevPython
 
     class Parser
     {
-        stack p_stack;       /* Stack of parser states */
-        grammar p_grammar;   /* Grammar to use */
-        _node p_tree;        /* Top of parse tree */
+        public stack p_stack;       /* Stack of parser states */
+        public grammar p_grammar;   /* Grammar to use */
+        public _node p_tree;        /* Top of parse tree */
 
         public Parser(grammar _grammar, short start)
         {
@@ -1119,7 +1119,7 @@ namespace DevPython
             for (int i = 0; i < n; i++)
             {
                 label l = g.g_ll.ll_label[i];
-                if (l.lb_type != type && l.lb_str.Equals(""))
+                if (l.lb_type == type && l.lb_str.Equals(""))
                     return i;
             }
             return -1; // Illegal token
@@ -1160,39 +1160,40 @@ namespace DevPython
                             return err;
 
                         /* Pop while we are in an accept-only state */
-                        while (s = &d->d_state[ps->p_stack.s_top->s_state],
-                            s->s_accept && s->s_narcs == 1) {
-                            s_pop(&ps->p_stack);
-                            if (s_empty(&ps->p_stack))
+                        while (true) {
+                            s = d.d_state[p_stack.s_top.s_state];
+                            if (s.s_accept == 0 || s.s_narcs != 1) break;
+                            p_stack.pop();
+                            if (p_stack.empty())
                             {
                                 return E_DONE;
                             }
-                            d = ps->p_stack.s_top->s_dfa;
+                            d = p_stack.s_top.s_dfa;
                         }
                         return E_OK;
                     }
                 }
 
-                if (s->s_accept) {
+                if (s.s_accept != 0) {
                     /* Pop this dfa and try again */
-                    s_pop(&ps->p_stack);
-                    D(printf(" Pop ...\n"));
-                    if (s_empty(&ps->p_stack)) {
+                    p_stack.pop();
+                    if (p_stack.empty()) {
                         return E_SYNTAX;
                     }
                     continue;
                 }
 
                 /* Stuck, report syntax error */
-                if (expected_ret) {
+                /*
+                 * if (expected_ret) {
                     if (s->s_lower == s->s_upper - 1) {
-                        /* Only one possible expected token */
+                        // Only one possible expected token 
                         * expected_ret = ps->p_grammar->
                             g_ll.ll_label[s->s_lower].lb_type;
                     }
                     else
                         * expected_ret = -1;
-                }
+                }*/
                 return E_SYNTAX;
             }
         }
@@ -1281,19 +1282,202 @@ namespace DevPython
 
     class Compiler
     {
+        static _node parsetok(Tokenizer tok, grammar g, short start)
+        //  int flags, perrdetail *err_ret
+        {
+            Parser ps = new Parser(g, start);
+            _node n = null;
+            int started = 0;
+            int error = 0;
+            for (;;)
+            {
+                int type;
+                String str;
+                int col_offset = -1;
+
+                type = tok.get(out str);
+                if (type == ERRORTOKEN)
+                {
+                    //err_ret->error = tok->done;
+                    error = tok.done;
+                    break;
+                }
+                if (type == ENDMARKER && started != 0)
+                {
+                    type = NEWLINE; /* Add an extra newline */
+                    started = 0;
+                    if (tok.indent != 0)
+                    {
+                        tok.pendin = -tok.indent;
+                        tok.indent = 0;
+                    }
+                }
+                else started = 1;
+                /*
+                if (a != NULL && a >= tok->line_start)
+                {
+                    col_offset = Py_SAFE_DOWNCAST(a - tok->line_start, intptr_t, int);
+                }
+                else
+                {
+                    col_offset = -1;
+                }
+                */
+                // err_ret->error = ...
+                error = ps.addToken((int)type, str,
+                                       tok.lineno, col_offset);
+                if(error != E_OK){
+                    if (error != E_DONE)
+                    {
+                        // err_ret->token = type;
+                    }
+                    break;
+                }
+            }
+
+            if (error == E_DONE)
+            {
+                n = ps.p_tree;
+                ps.p_tree = null;
+            }
+            else
+                n = null;
+
+            if (n == null)
+            {
+                if (tok.done == E_EOF)
+                    //err_ret->error = E_EOF;
+                    error = E_EOF;
+                //err_ret->lineno = tok->lineno;
+                /*if (tok->buf != NULL)
+                {
+                    size_t len;
+                    assert(tok->cur - tok->buf < INT_MAX);
+                    err_ret->offset = (int)(tok->cur - tok->buf);
+                    len = tok->inp - tok->buf;
+                    err_ret->text = (char*)PyObject_MALLOC(len + 1);
+                    if (err_ret->text != NULL)
+                    {
+                        if (len > 0)
+                            strncpy(err_ret->text, tok->buf, len);
+                        err_ret->text[len] = '\0';
+                    }
+                }*/
+            }
+            /*else if (tok->encoding != NULL)
+            {
+                node* r = PyNode_New(encoding_decl);
+                if (r)
+                    r->n_str = PyObject_MALLOC(strlen(tok->encoding) + 1);
+                if (!r || !r->n_str)
+                {
+                    err_ret->error = E_NOMEM;
+                    if (r)
+                        PyObject_FREE(r);
+                    n = NULL;
+                    goto done;
+                }
+                strcpy(r->n_str, tok->encoding);
+                tok->encoding = NULL;
+                r->n_nchildren = 1;
+                r->n_child = n;
+                n = r;
+            }*/
+
+            done:
+            return n;
+        }
+
         public static void run(String S, Main M)
         {
             S += '\n';
             Tokenizer t = new Tokenizer(S);
-            while (t.ok())
-            {
-                String p;
-                int j = t.get(out p);
-                M.printLog(Tokenizer._TokenNames[j] + "  " + p);
-            }
+            grammar g = Grammar._Grammar;
+            _node n = parsetok(t, g, 256);
         }
 
         #region PRIVATE_FUNCTIONS
+        #endregion
+
+        #region SOME_CONSTANTS
+        const int EOF = -1;
+        const int ENDMARKER = 0;
+        const int NAME = 1;
+        const int NUMBER = 2;
+        const int STRING = 3;
+        const int NEWLINE = 4;
+        const int INDENT = 5;
+        const int DEDENT = 6;
+        const int LPAR = 7;
+        const int RPAR = 8;
+        const int LSQB = 9;
+        const int RSQB = 10;
+        const int COLON = 11;
+        const int COMMA = 12;
+        const int SEMI = 13;
+        const int PLUS = 14;
+        const int MINUS = 15;
+        const int STAR = 16;
+        const int SLASH = 17;
+        const int VBAR = 18;
+        const int AMPER = 19;
+        const int LESS = 20;
+        const int GREATER = 21;
+        const int EQUAL = 22;
+        const int DOT = 23;
+        const int PERCENT = 24;
+        const int LBRACE = 25;
+        const int RBRACE = 26;
+        const int EQEQUAL = 27;
+        const int NOTEQUAL = 28;
+        const int LESSEQUAL = 29;
+        const int GREATEREQUAL = 30;
+        const int TILDE = 31;
+        const int CIRCUMFLEX = 32;
+        const int LEFTSHIFT = 33;
+        const int RIGHTSHIFT = 34;
+        const int DOUBLESTAR = 35;
+        const int PLUSEQUAL = 36;
+        const int MINEQUAL = 37;
+        const int STAREQUAL = 38;
+        const int SLASHEQUAL = 39;
+        const int PERCENTEQUAL = 40;
+        const int AMPEREQUAL = 41;
+        const int VBAREQUAL = 42;
+        const int CIRCUMFLEXEQUAL = 43;
+        const int LEFTSHIFTEQUAL = 44;
+        const int RIGHTSHIFTEQUAL = 45;
+        const int DOUBLESTAREQUAL = 46;
+        const int DOUBLESLASH = 47;
+        const int DOUBLESLASHEQUAL = 48;
+        const int AT = 49;
+        const int ATEQUAL = 50;
+        const int RARROW = 51;
+        const int ELLIPSIS = 52;
+        const int OP = 53;
+        const int ERRORTOKEN = 54;
+        const int COMMENT = 55;
+        const int NL = 56;
+        const int ENCODING = 57;
+        const int N_TOKENS = 58;
+        const int E_OK = 10;      /* No error */
+        const int E_EOF = 11;      /* End Of File */
+        const int E_INTR = 12;      /* Interrupted */
+        const int E_TOKEN = 13;      /* Bad token */
+        const int E_SYNTAX = 14;      /* Syntax error */
+        const int E_NOMEM = 15;      /* Ran out of memory */
+        const int E_DONE = 16;      /* Parsing complete */
+        const int E_ERROR = 17;      /* Execution error */
+        const int E_TABSPACE = 18;      /* Inconsistent mixing of tabs and spaces */
+        const int E_OVERFLOW = 19;      /* Node had too many children */
+        const int E_TOODEEP = 20;      /* Too many indentation levels */
+        const int E_DEDENT = 21;      /* No matching outer block for dedent */
+        const int E_DECODE = 22;      /* Error in decoding into Unicode */
+        const int E_EOFS = 23;      /* EOF in triple-quoted string */
+        const int E_EOLS = 24;      /* EOL in single-quoted string */
+        const int E_LINECONT = 25;      /* Unexpected characters after a line continuation */
+        const int E_IDENTIFIER = 26;     /* Invalid characters in identifier */
+        const int E_BADSINGLE = 27;      /* Ill-formed single statement input */
         #endregion
     }
 }
