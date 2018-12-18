@@ -158,15 +158,25 @@ namespace DevPython
         public String n_str;
         public int n_lineno;
         public int n_col_offset;
-        public int n_nchildren;
-        public _node[] n_child;
+        public int n_nchildren {
+            get { return n_child==null ? 0 : n_child.Count(); }
+        }
+        public List<_node> n_child;
         
         public _node(short t=0)
         {
             n_type = t;
+            // n_child = new List<_node>();
+            n_str = "";
         }
-        public int addChild(int type, String str, int lineno, int col_offset)
+        public int addChild(short type, String str, int lineno, int col_offset)
         {
+            _node n = new _node(type);
+            n.n_str = str;
+            n.n_lineno = lineno;
+            n.n_col_offset = col_offset;
+            if (n_child == null) n_child = new List<_node>();
+            n_child.Add(n);
             return 0;
         }
     };
@@ -218,15 +228,15 @@ namespace DevPython
         {
             _node n = s_top.s_parent;
             Debug.Assert(!empty());
-            int err = n.addChild(type, "", lineno, col_offset);
+            int err = n.addChild((short)type, "", lineno, col_offset);
             if (err != 0) return err;
             s_top.s_state = newstate;
-            return push(d, n.n_child[n.n_nchildren - 1]);
+           return push(d, n.n_child[n.n_nchildren - 1]);
         }
         public int doShift(int type, String str, int newstate, int lineno, int col_offset)
         {
             Debug.Assert(!empty());
-            int err = s_top.s_parent.addChild(type, str, lineno, col_offset);
+            int err = s_top.s_parent.addChild((short)type, str, lineno, col_offset);
             if (err != 0)
                 return err;
             s_top.s_state = newstate;

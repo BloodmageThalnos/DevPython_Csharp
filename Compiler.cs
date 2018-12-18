@@ -43,7 +43,7 @@ namespace DevPython
             nextline:
             p = "";
             int c;
-            bool blankline = false, nonascii = false;
+            bool blankline = false;//, nonascii = false;
             start = 0;
 
             /* Get indentation level */
@@ -191,10 +191,10 @@ namespace DevPython
                 }
                 while (is_potential_identifier_char(c))
                 {
-                    if (c >= 128)
+                    /*if (c >= 128)
                     {
                         nonascii = true;
-                    }
+                    }*/
                     c = nextc();
                 }
                 backup(c);
@@ -216,6 +216,24 @@ namespace DevPython
                 p = _buf.Substring(start, cur - start - 1); /* Leave '\n' out of the string */
                 cont_line = 0;
                 return NEWLINE;
+            }
+
+            /* Newline about \r */
+            if (c == '\r')
+            {
+                c = nextc();
+                if(c == '\n') {
+                    atbol = true;
+                    if (blankline || level > 0)
+                    {
+                        goto nextline;
+                    }
+
+                    p = _buf.Substring(start, cur - start - 1); /* Leave '\n' out of the string */
+                    cont_line = 0;
+                    return NEWLINE;
+                }
+                backup(c);
             }
 
             /* Period or number starting with period? */
@@ -1282,6 +1300,18 @@ namespace DevPython
 
     class Compiler
     {
+        public static void run(String S, Main M)
+        {
+            S += '\n';
+            Tokenizer t = new Tokenizer(S);
+            grammar g = Grammar._Grammar;
+            _node n = parsetok(t, g, 256);
+            if(n != null) M.printLog(show_node(n));
+        }
+
+        #region PRIVATE_FUNCTIONS
+
+
         static _node parsetok(Tokenizer tok, grammar g, short start)
         //  int flags, perrdetail *err_ret
         {
@@ -1326,7 +1356,8 @@ namespace DevPython
                 // err_ret->error = ...
                 error = ps.addToken((int)type, str,
                                        tok.lineno, col_offset);
-                if(error != E_OK){
+                if (error != E_OK)
+                {
                     if (error != E_DONE)
                     {
                         // err_ret->token = type;
@@ -1388,15 +1419,34 @@ namespace DevPython
             return n;
         }
 
-        public static void run(String S, Main M)
+        static String show_node(_node n)
         {
-            S += '\n';
-            Tokenizer t = new Tokenizer(S);
-            grammar g = Grammar._Grammar;
-            _node n = parsetok(t, g, 256);
+            String output = "";
+            dfs_node_1(n, 0, ref output);
+            //dfs_node_2(n);
+
+            return output;
         }
 
-        #region PRIVATE_FUNCTIONS
+        static void dfs_node_1(_node n, int depth, ref String s)
+        {
+            if (n.n_nchildren == 1) dfs_node_1(n.n_child[0], depth, ref s);
+                // ignore limb nodes with only one child.
+            else if (n.n_nchildren == 0)
+            {
+                for (int i = 0; i < depth; i++) s += "\t";
+                s += "Leaf: " + Tokenizer._TokenNames[n.n_type] + " " + n.n_str + "\n";
+            }
+            else
+            {
+                for (int i = 0; i < depth; i++) s += "\t";
+                s += "Node " + n.n_type + " with " + n.n_nchildren + " children:\n";
+                foreach(_node _n in n.n_child){
+                    dfs_node_1(_n, depth + 1, ref s);
+                }
+            }
+        }
+
         #endregion
 
         #region SOME_CONSTANTS

@@ -39,11 +39,13 @@ namespace DevPython {
             this.menubarMain = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuitemFileNew = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
             this.menuitemFileOpen = new System.Windows.Forms.ToolStripMenuItem();
             this.menuitemFileSave = new System.Windows.Forms.ToolStripMenuItem();
             this.menuitemFileSaveAs = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.menuitemFileExit = new System.Windows.Forms.ToolStripMenuItem();
             this.menuitemEdit = new System.Windows.Forms.ToolStripMenuItem();
             this.menuitemEditUndo = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
@@ -74,8 +76,6 @@ namespace DevPython {
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.sciLogArea = new ScintillaNET.Scintilla();
-            this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
-            this.menuitemFileExit = new System.Windows.Forms.ToolStripMenuItem();
             this.menubarMain.SuspendLayout();
             this.controlStatusBar.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -146,6 +146,11 @@ namespace DevPython {
             this.menuitemFileNew.Text = "新建(&N)";
             this.menuitemFileNew.Click += new System.EventHandler(this.menuitemFileNew_Click);
             // 
+            // toolStripSeparator7
+            // 
+            this.toolStripSeparator7.Name = "toolStripSeparator7";
+            this.toolStripSeparator7.Size = new System.Drawing.Size(187, 6);
+            // 
             // menuitemFileOpen
             // 
             this.menuitemFileOpen.Name = "menuitemFileOpen";
@@ -178,6 +183,13 @@ namespace DevPython {
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
             this.toolStripSeparator2.Size = new System.Drawing.Size(187, 6);
+            // 
+            // menuitemFileExit
+            // 
+            this.menuitemFileExit.Name = "menuitemFileExit";
+            this.menuitemFileExit.Size = new System.Drawing.Size(190, 26);
+            this.menuitemFileExit.Text = "退出(&X)";
+            this.menuitemFileExit.Click += new System.EventHandler(this.menuitemFileExit_Click);
             // 
             // menuitemEdit
             // 
@@ -378,12 +390,14 @@ namespace DevPython {
             // 
             this.sciTextArea.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.sciTextArea.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.sciTextArea.FontQuality = ScintillaNET.FontQuality.LcdOptimized;
             this.sciTextArea.HScrollBar = false;
             this.sciTextArea.Lexer = ScintillaNET.Lexer.Python;
             this.sciTextArea.Location = new System.Drawing.Point(0, 0);
             this.sciTextArea.Name = "sciTextArea";
             this.sciTextArea.Size = new System.Drawing.Size(843, 281);
             this.sciTextArea.TabIndex = 0;
+            // this.sciTextArea.
             // 
             // tabControl1
             // 
@@ -446,18 +460,6 @@ namespace DevPython {
             this.sciLogArea.Name = "sciLogArea";
             this.sciLogArea.Size = new System.Drawing.Size(829, 179);
             this.sciLogArea.TabIndex = 0;
-            // 
-            // toolStripSeparator7
-            // 
-            this.toolStripSeparator7.Name = "toolStripSeparator7";
-            this.toolStripSeparator7.Size = new System.Drawing.Size(187, 6);
-            // 
-            // menuitemFileExit
-            // 
-            this.menuitemFileExit.Name = "menuitemFileExit";
-            this.menuitemFileExit.Size = new System.Drawing.Size(190, 26);
-            this.menuitemFileExit.Text = "退出(&X)";
-            this.menuitemFileExit.Click += new System.EventHandler(this.menuitemFileExit_Click);
             // 
             // Main
             // 

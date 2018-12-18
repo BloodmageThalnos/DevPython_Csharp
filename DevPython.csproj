@@ -193,6 +193,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Resources\python35.dll" />
     <None Include="Resources\Icon1.ico" />
     <None Include="BigIcon.png" />
     <None Include="doc\1.jpg" />

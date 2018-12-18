@@ -4,21 +4,17 @@ DevPython
 
 Todo
 --------
-- 界面调整：字体字号颜色  
-- 词法分析：提取变量名用于调试、批量修改变量名等功能  
-- 语法分析：代码格式化  
-- 代码运行：调用python，重定向输入输出  
-- 代码调试：调用pdb，基于词法分析做出中间变量查看等功能。  
-- 代码混淆：基于语法分析，同义语句替换等  
+- 代码运行：AST_from_node、字节码生成、解释器（可能来不及写了，考虑部分调用dll）
+- 代码调试：加断点、单步运行、运行期间查看变量的值...
+- 代码混淆、c语言转译、其他花里胡哨
+- 界面调整（字体字号怎么改？？找了半天找不到 有空翻翻文档）
 
 Done
 --------
-- 代码编辑器  
-- 文件读写  
-- 显示行号  
-- 关键字高亮  
-- 查找替换  
-- 文件拖入打开  
+- 代码编辑器(文件读写、显示行号、关键字高亮、查找替换、文件拖入打开）
+- 输出编译过程
+- 词法分析（关键字高亮）
+- 语法分析（语法树输出）
 
 Background
 --------
@@ -33,3 +29,5 @@ Functions
 Appendix
 -----------
 1. The form and editor function are cloned from  http://www.simplygoodcode.com/2012/04/notepad-clone-in-net-winforms/
+2. The coding structure are studied and simplified from Cython.
+3. 
