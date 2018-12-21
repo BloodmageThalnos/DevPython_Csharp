@@ -1307,7 +1307,7 @@ namespace DevPython
                 M.clearLog();
                 M.printLog("开始编译...\n");
 
-                S += "\n\n";    // newline hack
+                S += "\n\n"; // newline hack
                 Tokenizer t = new Tokenizer(S);
                 grammar g = Grammar._Grammar;
                 _node n = parsetok(t, g, 256);
@@ -1326,7 +1326,7 @@ namespace DevPython
                 M.printOutput("编译器内部错误：\n"+e.ToString());
             }
 
-            //运行
+            // 运行
             M.printOutput("开始运行"+M.Filename+"...\n");
             M.openProcess();
         }

@@ -10,6 +10,7 @@ using System.IO;
 using System.Drawing.Printing;
 using System.Diagnostics;
 using System.Threading;
+using ScintillaNET;
 
 // TODO: In order to mimic Notepad exactly the status bar should be hidden if Word Wrap is turned off and the option should be disabled. Setting should be restored if Word Wrap is turned back off.
 
@@ -28,72 +29,126 @@ namespace DevPython {
             Control.CheckForIllegalCrossThreadCalls = false;
         }
 
+        public void openDebugger()
+        {
+            Process _p = null;
+            _p = new Process();
+            _p.StartInfo.UseShellExecute = false;
+            _p.StartInfo.CreateNoWindow = true;
+            _p.StartInfo.RedirectStandardInput = true;
+            _p.StartInfo.RedirectStandardOutput = true;
+            _p.StartInfo.FileName = "python";
+            _p.StartInfo.Arguments = "-m pdb "+Filename;
+            _p.OutputDataReceived += (sender1, e1) => {
+                if (_p == null || _p.HasExited || _p == null)
+                { // 处理程序退出
+                    printOutput("\n程序已返回。");
+                    _p.Close();
+                    _p = null;
+                }
+
+                if (!string.IsNullOrEmpty(e1.Data))
+                {
+                    string sData = e1.Data;
+                    {
+                        printOutput(sData);
+                    }
+                }
+            };
+            
+            sciOutputArea.CharAdded += new EventHandler<CharAddedEventArgs>((object sender, CharAddedEventArgs e) =>
+            {
+                if (_p != null && e.Char == '\n')
+                {
+                    int i;
+                    for (i = sciOutputArea.CurrentPosition - 2; i >= 0; i--)
+                    {
+                        if (sciOutputArea.Text[i] == '\n') break;
+                    }
+
+                    string input = sciOutputArea.Text.Substring(i + 1, sciOutputArea.CurrentPosition - i - 3);
+                    
+                    _p.StandardInput.WriteLine(input);
+                }
+            });
+
+            _p.Start();
+            
+            _p.BeginOutputReadLine();
+        }
+
         public void openProcess()
         {
             Process _p = null;
-            bool start = false, end = false;
-            int eatline = 0, eatchar = 0;
+            // bool start = false, end = false;
+            // int eatline = 0, eatchar = 0;
 
             _p = new Process();
             _p.StartInfo.UseShellExecute = false;
             _p.StartInfo.CreateNoWindow = true;
             _p.StartInfo.RedirectStandardInput = true;
             _p.StartInfo.RedirectStandardOutput = true;
-            _p.StartInfo.FileName = "cmd";
-            _p.OutputDataReceived += new DataReceivedEventHandler((sender1, e1) =>
-            {
+            _p.StartInfo.FileName = "python";
+            _p.StartInfo.Arguments = Filename;
+            _p.OutputDataReceived += (s1, e1) => {
+                if (_p == null || _p.HasExited || _p == null)
+                {// 处理程序退出
+                    printOutput("\n程序已返回。");
+                    _p.Close();
+                    _p = null;
+                }
+
                 if (!string.IsNullOrEmpty(e1.Data))
                 {
                     string sData = e1.Data;
-                    // 处理程序退出
+                    printOutput(sData);
+                }
+            };
+
+            //_p.Exited += (s, e) => ;
+
+            sciOutputArea.CharAdded += new EventHandler<CharAddedEventArgs>((object sender, CharAddedEventArgs e) =>
+            {
+                if(_p!=null && e.Char == '\n')
+                {
+                    int i;
+                    for (i=sciOutputArea.CurrentPosition - 2; i>=0; i--)
                     {
-                        if(sData == "@echo _______TEST_END_______")
-                        {
-                            end = true;
-                            start = false;
-                            _p.Close();
-                            _p = null;
-                            printOutput("程序执行完毕。");
-                        }
+                        if (sciOutputArea.Text[i] == '\n') break;
                     }
 
-                    // 处理输出
-                    {
-                        if (!start) return;
-                        if (eatline > 0)
-                        {
-                            eatline--;
-                            return;
-                        }
-                        printOutput(sData);
-                    }
+                    string input = sciOutputArea.Text.Substring(i + 1, sciOutputArea.CurrentPosition - i - 3);
+
+                    //printOutput(input);
+                    _p.StandardInput.WriteLine(input);
                 }
             });
+            
             _p.Start();
 
             //_p.StandardInput.AutoFlush = true;
 
             _p.BeginOutputReadLine();
 
-            _p.StandardInput.WriteLine("echo off");
+            //_p.StandardInput.WriteLine("echo off");
 
-            Thread.Sleep(377);
-            
-            _p.StandardInput.WriteLine("python "+ Filename);
+            //Thread.Sleep(377);
 
-            start = true;
-            eatline = 1;
-            
-            Thread.Sleep(77);
+            //_p.StandardInput.WriteLine("python "+ Filename);
 
-            _p.StandardInput.Flush();
+            //start = true;
+            //eatline = 1;
 
-            start = true;
-            eatline = eatchar = 0;
-            
-            _p.StandardInput.WriteLine("@echo _______TEST_END_______");
+            //Thread.Sleep(77);
 
-            _p.StandardInput.Flush();
+            //_p.StandardInput.Flush();
+
+            //start = false;
+            //eatline = eatchar = 0;
+
+            //_p.StandardInput.WriteLine("@echo _______TEST_END_______");
+
+            //_p.StandardInput.Flush();
 
             // _p.WaitForExit(); 
             //_p.Close();
@@ -103,8 +158,9 @@ namespace DevPython {
 
         public void printLog(String S)
         {
-            sciLogArea.Text += S + '\n';
-            sciLogArea.SelectionStart = sciLogArea.TextLength - 1;
+            //sciLogArea.Text += S + '\n';
+            sciLogArea.AppendText(S + '\n');
+            sciLogArea.SelectionStart = sciLogArea.TextLength;
             sciLogArea.ScrollCaret();
         }
 
@@ -115,9 +171,13 @@ namespace DevPython {
 
         public void printOutput(String S)
         {
-            sciOutputArea.Text += S + '\n';
-            sciOutputArea.SelectionStart = sciOutputArea.TextLength - 1;
-            sciOutputArea.ScrollCaret();
+            sciOutputArea.AppendText(S + '\n');
+            try
+            {
+                sciOutputArea.SelectionStart = sciOutputArea.TextLength;
+                sciOutputArea.ScrollCaret();
+            }catch (Exception e){};
+            // error will be caused due to multiprocessing, but i dont know how to handle it. So just bob it.
         }
 
         public void clearOutput()
@@ -875,12 +935,8 @@ Do you want to create a new file?
         
         private void runToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Compiler.run(Content, this);
-        }
-
-        private void toolStripButton1_Click(object sender, EventArgs e)
-        {
-            Compiler.run(Content, this);
+            if(Save())
+                Compiler.run(Content, this);
         }
 
         private void menuitemFileExit_Click(object sender, EventArgs e)
