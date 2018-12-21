@@ -8,6 +8,8 @@ using System.Text;
 using System.Windows.Forms;
 using System.IO;
 using System.Drawing.Printing;
+using System.Diagnostics;
+using System.Threading;
 
 // TODO: In order to mimic Notepad exactly the status bar should be hidden if Word Wrap is turned off and the option should be disabled. Setting should be restored if Word Wrap is turned back off.
 
@@ -22,8 +24,46 @@ namespace DevPython {
                 Bounds = Settings.WindowPosition;
                 StartPosition = FormStartPosition.Manual;
             }
+
+            Control.CheckForIllegalCrossThreadCalls = false;
         }
-        
+
+        public void openProcess()
+        {
+            Process _p = null;
+
+            _p = new Process();
+            _p.StartInfo.UseShellExecute = false;
+            _p.StartInfo.CreateNoWindow = false;
+            _p.StartInfo.RedirectStandardInput = true;
+            _p.StartInfo.RedirectStandardOutput = true;
+            //_p.StartInfo.RedirectStandardError = true;
+            _p.StartInfo.FileName = "cmd";
+            _p.OutputDataReceived += new DataReceivedEventHandler((sender1, e1) =>
+            {
+                if (!string.IsNullOrEmpty(e1.Data))
+                {
+                    string sData = e1.Data;
+                    printOutput(sData);
+                }
+            });
+            _p.Start();
+
+            //_p.StandardInput.AutoFlush = true;
+
+            _p.BeginOutputReadLine();
+
+            _p.StandardInput.WriteLine("python -c \"" + Content + "\"");
+
+            _p.StandardInput.Flush();
+
+            /* _p.WaitForExit(); */
+
+            _p.Close();
+
+            _p = null;
+        }
+
         public void printLog(String S)
         {
             sciLogArea.Text += S + '\n';
@@ -86,7 +126,15 @@ namespace DevPython {
         }
 
         public string Content {
-            get { return sciTextArea.Text; }
+            get {
+                return sciTextArea.Text;
+                /*string ret = "";
+                foreach(char c in sciTextArea.Text)
+                {
+                    if(c!='\r')ret+=c;
+                }
+                return ret;*/
+            }
             set { sciTextArea.Text = value; }
         }
 

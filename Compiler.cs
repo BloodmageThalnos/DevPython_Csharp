@@ -1302,11 +1302,33 @@ namespace DevPython
     {
         public static void run(String S, Main M)
         {
-            S += '\n';
-            Tokenizer t = new Tokenizer(S);
-            grammar g = Grammar._Grammar;
-            _node n = parsetok(t, g, 256);
-            if(n != null) M.printLog(show_node(n));
+            M.printOutput("123");
+            // 编译
+            try {
+                M.clearLog();
+                M.printLog("开始编译...\n");
+
+                // S += "\n\n";    // newline hack
+                Tokenizer t = new Tokenizer(S);
+                grammar g = Grammar._Grammar;
+                _node n = parsetok(t, g, 256);
+                if (n != null)
+                {
+                    M.printLog("语法树信息：\n");
+                    M.printLog(show_node(n));
+                }
+                else
+                {
+                    M.printLog("语法错误。");
+                }
+
+            }catch(Exception e)
+            {
+                M.printOutput("编译器内部错误：\n"+e.ToString());
+            }
+
+            //运行
+            M.openProcess();
         }
 
         #region PRIVATE_FUNCTIONS
@@ -1530,4 +1552,6 @@ namespace DevPython
         const int E_BADSINGLE = 27;      /* Ill-formed single statement input */
         #endregion
     }
+
+
 }
