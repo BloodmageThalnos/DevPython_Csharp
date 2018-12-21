@@ -308,8 +308,8 @@ namespace DevPython {
             // 
             this.runToolStripMenuItem.Name = "runToolStripMenuItem";
             this.runToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F5;
-            this.runToolStripMenuItem.Size = new System.Drawing.Size(220, 26);
-            this.runToolStripMenuItem.Text = "运行（不调试）";
+            this.runToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
+            this.runToolStripMenuItem.Text = "运行";
             this.runToolStripMenuItem.Click += new System.EventHandler(this.runToolStripMenuItem_Click);
             // 
             // helpToolStripMenuItem
@@ -397,7 +397,6 @@ namespace DevPython {
             this.sciTextArea.Name = "sciTextArea";
             this.sciTextArea.Size = new System.Drawing.Size(843, 281);
             this.sciTextArea.TabIndex = 0;
-            // this.sciTextArea.
             // 
             // tabControl1
             // 

@@ -31,20 +31,42 @@ namespace DevPython {
         public void openProcess()
         {
             Process _p = null;
+            bool start = false, end = false;
+            int eatline = 0, eatchar = 0;
 
             _p = new Process();
             _p.StartInfo.UseShellExecute = false;
-            _p.StartInfo.CreateNoWindow = false;
+            _p.StartInfo.CreateNoWindow = true;
             _p.StartInfo.RedirectStandardInput = true;
             _p.StartInfo.RedirectStandardOutput = true;
-            //_p.StartInfo.RedirectStandardError = true;
             _p.StartInfo.FileName = "cmd";
             _p.OutputDataReceived += new DataReceivedEventHandler((sender1, e1) =>
             {
                 if (!string.IsNullOrEmpty(e1.Data))
                 {
                     string sData = e1.Data;
-                    printOutput(sData);
+                    // 处理程序退出
+                    {
+                        if(sData == "@echo _______TEST_END_______")
+                        {
+                            end = true;
+                            start = false;
+                            _p.Close();
+                            _p = null;
+                            printOutput("程序执行完毕。");
+                        }
+                    }
+
+                    // 处理输出
+                    {
+                        if (!start) return;
+                        if (eatline > 0)
+                        {
+                            eatline--;
+                            return;
+                        }
+                        printOutput(sData);
+                    }
                 }
             });
             _p.Start();
@@ -53,15 +75,30 @@ namespace DevPython {
 
             _p.BeginOutputReadLine();
 
-            _p.StandardInput.WriteLine("python -c \"" + Content + "\"");
+            _p.StandardInput.WriteLine("echo off");
+
+            Thread.Sleep(377);
+            
+            _p.StandardInput.WriteLine("python "+ Filename);
+
+            start = true;
+            eatline = 1;
+            
+            Thread.Sleep(77);
 
             _p.StandardInput.Flush();
 
-            /* _p.WaitForExit(); */
+            start = true;
+            eatline = eatchar = 0;
+            
+            _p.StandardInput.WriteLine("@echo _______TEST_END_______");
 
-            _p.Close();
+            _p.StandardInput.Flush();
 
-            _p = null;
+            // _p.WaitForExit(); 
+            //_p.Close();
+
+            //_p = null;
         }
 
         public void printLog(String S)
@@ -184,8 +221,9 @@ namespace DevPython {
         private bool _IsDirty;
         public bool IsDirty {
             get {
-                if (Filename == null && Content.IsEmpty()) return false;
-                return _IsDirty;
+                return true;
+                //if (Filename == null && Content.IsEmpty()) return false;
+                //return _IsDirty;
             }
             set {
                 _IsDirty = value;
