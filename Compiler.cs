@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace DevPython
@@ -1324,11 +1326,122 @@ namespace DevPython
             }catch(Exception e)
             {
                 M.printOutput("编译器内部错误：\n"+e.ToString());
+                return;
             }
 
             // 运行
             M.printOutput("开始运行"+M.Filename+"...\n");
             M.openProcess();
+        }
+
+
+        public static void debug(String S, Main M)
+        {
+            // 编译
+            try
+            {
+                M.clearLog();
+                M.printLog("开始编译...\n");
+
+                S += "\n\n"; // newline hack
+                Tokenizer t = new Tokenizer(S);
+                grammar g = Grammar._Grammar;
+                _node n = parsetok(t, g, 256);
+                if (n != null)
+                {
+                    M.printLog("语法树信息：\n");
+                    M.printLog(show_node(n));
+                }
+                else
+                {
+                    M.printLog("语法错误。");
+                }
+
+            }
+            catch (Exception e)
+            {
+                M.printOutput("编译器内部错误：\n" + e.ToString());
+                return;
+            }
+
+            // 运行并调试
+            Process p;
+            M.printOutput("开始调试" + M.Filename + "...\n");
+            M.openDebugger(out p);
+            int lineno = 0;
+            bool sendN = false, waitForRead = true, hadRead = false;
+            new Thread(()=> {
+                for (;;)
+                {
+                    if (waitForRead)
+                    {
+                        waitForRead = false;
+
+                        string line = p.StandardOutput.ReadLine();
+                        // 删除(Pdb)，可能在任意位置出现，比较bob
+
+                        if (line.StartsWith("(Pdb) ")) line = line.Substring(6);
+
+                        // 判断起始字符
+                        if (line.StartsWith("> "))
+                        { // 当前行号和历史栈信息
+                            // 获取行号
+                            int numStart = line.IndexOf('(')+1;
+                            lineno = 0;
+                            for(;line[numStart]>='0' && line[numStart] <= '9'; numStart++)
+                            {
+                                lineno = lineno * 10 + line[numStart] - '0';
+                            }
+                            // Bob with lineno
+                            M.printLog("行号 "+lineno.ToString());
+                        }
+                        else if(line.StartsWith("-> "))
+                        { // 当前运行光标位置。
+                        }
+                        else if (line.StartsWith("--Return--"))
+                        { // 程序结束
+                            M.printLog("\n程序已经返回。");
+                            p.Close();
+                            p = null;
+                            Process.GetCurrentProcess().Kill();
+                        }
+                        else
+                        { // 当前输出。打到屏幕上
+                            M.printOutput(line);
+                        }
+                        M.printLog("found: "+line);
+
+                        hadRead = true;
+                    }
+                    Thread.Sleep(37);
+                }
+            }).Start(); // and it will never stop.
+            new Thread(()=>
+            {
+                for (;;)
+                {
+                    if (sendN)
+                    {
+                        p.StandardInput.WriteLine('n');
+                        p.StandardInput.Flush();
+                        sendN = false;
+                        waitForRead = true;
+                    }
+                    Thread.Sleep(17);
+                }
+            }).Start();
+            new Thread(() =>
+            {
+                for (;;)
+                {
+                    if (hadRead)
+                    {
+                        hadRead = false;
+                        
+                    }
+                    Thread.Sleep(7);
+                }
+            }).Start();
         }
 
         #region PRIVATE_FUNCTIONS

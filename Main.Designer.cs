@@ -61,6 +61,7 @@ namespace DevPython {
             this.menuitemFormatFont = new System.Windows.Forms.ToolStripMenuItem();
             this.debugToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.runToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.DebuggerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuitemHelp = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
@@ -299,7 +300,8 @@ namespace DevPython {
             // debugToolStripMenuItem
             // 
             this.debugToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.runToolStripMenuItem});
+            this.runToolStripMenuItem,
+            this.DebuggerToolStripMenuItem});
             this.debugToolStripMenuItem.Name = "debugToolStripMenuItem";
             this.debugToolStripMenuItem.Size = new System.Drawing.Size(72, 24);
             this.debugToolStripMenuItem.Text = "运行(&R)";
@@ -311,6 +313,14 @@ namespace DevPython {
             this.runToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
             this.runToolStripMenuItem.Text = "运行";
             this.runToolStripMenuItem.Click += new System.EventHandler(this.runToolStripMenuItem_Click);
+            // 
+            // DebuggerToolStripMenuItem
+            // 
+            this.DebuggerToolStripMenuItem.Name = "DebuggerToolStripMenuItem";
+            this.DebuggerToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F6;
+            this.DebuggerToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
+            this.DebuggerToolStripMenuItem.Text = "调试";
+            this.DebuggerToolStripMenuItem.Click += new System.EventHandler(this.DebuggerToolStripMenuItem_Click);
             // 
             // helpToolStripMenuItem
             // 
@@ -772,5 +782,6 @@ namespace DevPython {
         private ToolStripMenuItem DonateToolStripMenuItem;
         private ToolStripSeparator toolStripSeparator7;
         private ToolStripMenuItem menuitemFileExit;
+        private ToolStripMenuItem DebuggerToolStripMenuItem;
     }
 }

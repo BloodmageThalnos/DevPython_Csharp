@@ -29,22 +29,27 @@ namespace DevPython {
             Control.CheckForIllegalCrossThreadCalls = false;
         }
 
-        public void openDebugger()
+        public void openDebugger(out Process p)
         {
             Process _p = null;
-            _p = new Process();
+            //int ;
+            p = _p = new Process();
             _p.StartInfo.UseShellExecute = false;
             _p.StartInfo.CreateNoWindow = true;
             _p.StartInfo.RedirectStandardInput = true;
             _p.StartInfo.RedirectStandardOutput = true;
             _p.StartInfo.FileName = "python";
-            _p.StartInfo.Arguments = "-m pdb "+Filename;
-            _p.OutputDataReceived += (sender1, e1) => {
-                if (_p == null || _p.HasExited || _p == null)
+            _p.StartInfo.Arguments = "-m pdb " + Filename;
+            _p.OutputDataReceived += (s1, e1) => {
+                if (_p == null || _p.HasExited)
                 { // 处理程序退出
-                    printOutput("\n程序已返回。");
-                    _p.Close();
-                    _p = null;
+                    if (_p != null)
+                    {
+                        printOutput("\n程序已返回。");
+                        _p.Close();
+                        _p = null;
+                    }
+                    return;
                 }
 
                 if (!string.IsNullOrEmpty(e1.Data))
@@ -52,6 +57,7 @@ namespace DevPython {
                     string sData = e1.Data;
                     {
                         printOutput(sData);
+                        
                     }
                 }
             };
@@ -73,8 +79,8 @@ namespace DevPython {
             });
 
             _p.Start();
-            
-            _p.BeginOutputReadLine();
+
+            // _p.BeginOutputReadLine();
         }
 
         public void openProcess()
@@ -94,8 +100,12 @@ namespace DevPython {
                 if (_p == null || _p.HasExited || _p == null)
                 {// 处理程序退出
                     printOutput("\n程序已返回。");
-                    _p.Close();
-                    _p = null;
+                    if (_p != null)
+                    {
+                        _p.Close();
+                        _p = null;
+                    }
+                    return;
                 }
 
                 if (!string.IsNullOrEmpty(e1.Data))
@@ -938,10 +948,16 @@ Do you want to create a new file?
             if(Save())
                 Compiler.run(Content, this);
         }
+        private void DebuggerToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (Save())
+                Compiler.debug(Content, this);
+        }
 
         private void menuitemFileExit_Click(object sender, EventArgs e)
         {
             Close();
         }
+
     }
 }
