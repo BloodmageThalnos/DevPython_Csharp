@@ -29,6 +29,13 @@ namespace DevPython {
             Control.CheckForIllegalCrossThreadCalls = false;
         }
 
+        public bool btnNext = false, btnStep = false, btnContinue = false;
+
+        public bool debugging {
+            get { return DebugDToolStripMenuItem.Enabled; }
+            set { DebugDToolStripMenuItem.Enabled = value; }
+        }
+
         public void openDebugger(out Process p)
         {
             Process _p = null;
@@ -99,7 +106,7 @@ namespace DevPython {
             _p.OutputDataReceived += (s1, e1) => {
                 if (_p == null || _p.HasExited || _p == null)
                 {// 处理程序退出
-                    printOutput("\n程序已返回。");
+                    printOutput("\n程序已返回。\n");
                     if (_p != null)
                     {
                         _p.Close();
@@ -664,6 +671,7 @@ Do you want to create a new file?
             }
             return HeaderOrFooterInfo;
         }
+
         private void menuitemEditUndo_Click(object sender, EventArgs e) {
             sciTextArea.Undo();
         }
@@ -959,5 +967,22 @@ Do you want to create a new file?
             Close();
         }
 
+        private void 下一步NToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (!debugging) return;
+            btnNext = true;
+        }
+
+        private void 继续运行CToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (!debugging) return;
+            btnContinue = true;
+        }
+
+        private void 单步进入SToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (!debugging) return;
+            btnStep = true;
+        }
     }
 }

@@ -1312,18 +1312,28 @@ namespace DevPython
                 S += "\n\n"; // newline hack
                 Tokenizer t = new Tokenizer(S);
                 grammar g = Grammar._Grammar;
-                _node n = parsetok(t, g, 256);
-                if (n != null)
-                {
-                    M.printLog("语法树信息：\n");
-                    M.printLog(show_node(n));
-                }
-                else
-                {
-                    M.printLog("语法错误。");
+                //while (true) {
+                for(int i=1; i<10; i++) { 
+                    _node n = parsetok(t, g, 256);
+                    if (n != null)
+                    {
+                        M.printLog("语法树信息：");
+                        M.printLog(show_node(n));
+                    }
+                    else
+                    {
+                        M.printLog("语法错误。");
+                        break;
+                    }
+                    if (t.cur >= S.Length - 3)
+                    {
+                        M.printLog("语法分析结束。");
+                        break;
+                    }
                 }
 
-            }catch(Exception e)
+            }
+            catch(Exception e)
             {
                 M.printOutput("编译器内部错误：\n"+e.ToString());
                 return;
@@ -1333,7 +1343,6 @@ namespace DevPython
             M.printOutput("开始运行"+M.Filename+"...\n");
             M.openProcess();
         }
-
 
         public static void debug(String S, Main M)
         {
@@ -1368,18 +1377,31 @@ namespace DevPython
             Process p;
             M.printOutput("开始调试" + M.Filename + "...\n");
             M.openDebugger(out p);
+            M.debugging = true;
             int lineno = 0;
-            bool sendN = false, waitForRead = true, hadRead = false;
+            bool sendN = false, sendS = false, sendC = true;
+            bool running = false, hasRead = false;
+
+            // 设置断点
+            for (int i = 2; i < 3; i++)
+            {
+                p.StandardInput.WriteLine("b " + i.ToString());
+                p.StandardInput.Flush();
+            }
+
+            // bool waitForRead = true, hadRead = false, stepOn = false;
             new Thread(()=> {
                 for (;;)
                 {
-                    if (waitForRead)
+                    // waitForRead 锁会引起读写阻塞，难以处理多行输入，故注释之
+                    //if (waitForRead)
                     {
-                        waitForRead = false;
+                        //waitForRead = false;
 
                         string line = p.StandardOutput.ReadLine();
-                        // 删除(Pdb)，可能在任意位置出现，比较bob
+                        M.printLog("found: " + line);
 
+                        // 删除(Pdb)，可能在任意位置出现，比较bob
                         if (line.StartsWith("(Pdb) ")) line = line.Substring(6);
 
                         // 判断起始字符
@@ -1392,60 +1414,152 @@ namespace DevPython
                             {
                                 lineno = lineno * 10 + line[numStart] - '0';
                             }
-                            // Bob with lineno
-                            M.printLog("行号 "+lineno.ToString());
+                            M.printLog("当前运行第" + lineno.ToString() + "行。\n");
+
                         }
                         else if(line.StartsWith("-> "))
                         { // 当前运行光标位置。
+                            if (running)
+                            {
+                                running = false;
+                                M.printOutput("第"+lineno.ToString()+"行遇到断点停留。");
+                            }
+
+                            hasRead = true;
                         }
-                        else if (line.StartsWith("--Return--"))
+                        else if (line.StartsWith("Breakpoint") || line.StartsWith("End of file"))
+                        { // 断点相关
+                        }
+                        else if (line.StartsWith("--Return--") || line.IndexOf("finish")!=-1)
                         { // 程序结束
-                            M.printLog("\n程序已经返回。");
+                            M.printOutput("\n程序已返回。\n");
                             p.Close();
                             p = null;
-                            Process.GetCurrentProcess().Kill();
+                            M.debugging = false;
+                            Thread.CurrentThread.Abort();
                         }
                         else
                         { // 当前输出。打到屏幕上
                             M.printOutput(line);
                         }
-                        M.printLog("found: "+line);
-
-                        hadRead = true;
                     }
                     Thread.Sleep(37);
                 }
             }).Start(); // and it will never stop.
+
             new Thread(()=>
             {
+                while (!hasRead)
+                {
+                    Thread.Sleep(17);
+                }
                 for (;;)
                 {
-                    if (sendN)
+                    if (p == null)
                     {
+                        Thread.CurrentThread.Abort();
+                        return;
+                    }
+                    if (sendN)
+                    {   // 下一步
                         p.StandardInput.WriteLine('n');
                         p.StandardInput.Flush();
                         sendN = false;
-                        waitForRead = true;
+                        //waitForRead = true;
+                        continue;
+                    }
+                    if (sendS)
+                    {   // 单步进入
+                        p.StandardInput.WriteLine('s');
+                        p.StandardInput.Flush();
+                        sendS = false;
+                        //waitForRead = true;
+                        continue;
+                    }
+                    if (sendC)
+                    {   // 继续运行
+                        p.StandardInput.WriteLine('c');
+                        p.StandardInput.Flush();
+                        sendC = false;
+                        running = true;
+                        //waitForRead = true;
+                        continue;
                     }
                     Thread.Sleep(17);
                 }
             }).Start();
+
             new Thread(() =>
             {
+                Thread.Sleep(377);
+
                 for (;;)
                 {
-                    if (hadRead)
+                    if (p == null)
+                    {
+                        Thread.CurrentThread.Abort();
+                        return;
+                    }
+                   /* if (hadRead)
                     {
                         hadRead = false;
+
+                        // Bob with lineno
+                        M.printOutput("行号 " + lineno.ToString());
+
+                        // TODO: 判断是否遇到断点
+                        bool reachBreak = false;
                         
+                        // 如果在继续运行模式，且未遇到断点，就自动下一步
+                        if (!reachBreak && stepOn)
+                        {
+                            sendN = true;
+                        }
+                        continue;
+                    }*/
+                    if (M.btnNext)
+                    {
+                        // 断点状态下按了下一步按钮
+                        M.btnNext = false;
+
+                        // 为防止冲突，先等待sendN释放
+                        while (sendN)
+                        {
+                            Thread.Sleep(7);
+                        }
+                        sendN = true;
+                    }
+                    if (M.btnStep)
+                    {
+                        // 断点状态下按了下一步按钮
+                        M.btnStep = false;
+
+                        // 为防止冲突，先等待sendS释放
+                        while (sendS)
+                        {
+                            Thread.Sleep(7);
+                        }
+                        sendS = true;
+                    }
+                    if (M.btnContinue)
+                    {
+                        // 断点状态下按了下一步按钮
+                        M.btnContinue = false;
+
+                        // 为防止冲突，先等待sendC释放
+                        while (sendC)
+                        {
+                            Thread.Sleep(7);
+                        }
+                        sendC = true;
                     }
                     Thread.Sleep(7);
                 }
             }).Start();
+            
         }
 
         #region PRIVATE_FUNCTIONS
-
 
         static _node parsetok(Tokenizer tok, grammar g, short start)
         //  int flags, perrdetail *err_ret
@@ -1665,6 +1779,5 @@ namespace DevPython
         const int E_BADSINGLE = 27;      /* Ill-formed single statement input */
         #endregion
     }
-
 
 }
