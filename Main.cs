@@ -973,6 +973,111 @@ Do you want to create a new file?
             btnNext = true;
         }
 
+        private void 变量替换ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //String temp = Content;
+            //Compiler.rename(ref temp, sciTextArea.CurrentPosition, "good");
+            //Content = temp;
+            bool renaming = true;
+            String name;
+            List<int> poslist;
+            int pos = Compiler.getname(Content, sciTextArea.CurrentPosition, out name, out poslist);
+            if (pos == 0)
+            {
+                return;
+            }
+            sciTextArea.BeforeDelete += new EventHandler<BeforeModificationEventArgs>((object _s,BeforeModificationEventArgs _e)=>
+            {
+                if (renaming)
+                {
+                    if(_e.Text.Length != 1)
+                    {
+                        return;
+                    }
+                    String newname;
+                    List<int> newlist;
+                    int newpos = Compiler.getname(Content, sciTextArea.CurrentPosition, out newname, out newlist);
+                    if (newpos != pos)
+                    {
+                        renaming = false;
+                        return;
+                    }
+                    int offset = 0, delta = sciTextArea.CurrentPosition - pos - 1, newp = sciTextArea.CurrentPosition, newpadded = 0;
+                    String temp = Content;
+                    temp = temp.Remove(_e.Position, 1);
+                    newp --;
+                    for (int i = 0; i < poslist.Count; i++)
+                    {
+                        if (newpadded == 0 && poslist[i] > newp)
+                        {
+                            newp += offset;
+                            pos += offset;
+                            newpadded = 1;
+                            offset--;
+                        }
+                        temp = temp.Remove(poslist[i] + offset + delta, 1);
+                        poslist[i] += offset;
+                        offset--;
+                    }
+                    if (newpadded == 0)
+                    {
+                        newp += offset;
+                        pos += offset;
+                    }
+                    new Thread(() =>
+                    {
+                        Thread.Sleep(17);
+                        Content = temp;
+                        sciTextArea.GotoPosition(newp);
+                    }).Start();
+                    //sciTextArea.CurrentPosition = newp;
+                }
+            });
+            sciTextArea.CharAdded += new EventHandler<CharAddedEventArgs>((object _s, CharAddedEventArgs _e) =>
+            {
+                if (renaming)
+                {
+                    String newname;
+                    List<int> newlist;
+                    int newpos = Compiler.getname(Content, sciTextArea.CurrentPosition, out newname, out newlist);
+                    if (newpos != pos)
+                    {
+                        renaming = false;
+                        return;
+                    }
+                    int offset = 0, delta = sciTextArea.CurrentPosition - pos - 1, newp = sciTextArea.CurrentPosition, newpadded = 0;
+                    String temp = Content;
+                    String insert = "";
+                    insert += (char)_e.Char;
+                    for(int i=0; i<poslist.Count; i++)
+                    {
+                        if (newpadded == 0 && poslist[i] > newp)
+                        {
+                            newp += offset;
+                            pos += offset;
+                            newpadded = 1;
+                            offset++;
+                        }
+                        temp = temp.Insert(poslist[i] + offset + delta, insert);
+                        poslist[i] += offset;
+                        offset++;
+                    }
+                    if (newpadded == 0)
+                    {
+                        newp += offset;
+                        pos += offset;
+                    }
+                    new Thread(() =>
+                    {
+                        Thread.Sleep(17);
+                        Content = temp;
+                        sciTextArea.GotoPosition(newp);
+                    }).Start();
+                    //sciTextArea.CurrentPosition = newp;
+                }
+            });
+        }
+
         private void 继续运行CToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (!debugging) return;

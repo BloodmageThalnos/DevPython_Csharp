@@ -63,6 +63,7 @@ namespace DevPython {
             this.runToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.DebuggerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.DebugDToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.继续运行CToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.下一步NToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.单步进入SToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -70,6 +71,8 @@ namespace DevPython {
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.menuitemAbout = new System.Windows.Forms.ToolStripMenuItem();
             this.DonateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.工具TToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.变量替换ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.controlStatusBar = new System.Windows.Forms.StatusStrip();
             this.controlCaretPositionLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
@@ -80,7 +83,6 @@ namespace DevPython {
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.sciLogArea = new ScintillaNET.Scintilla();
-            this.继续运行CToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menubarMain.SuspendLayout();
             this.controlStatusBar.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -120,6 +122,7 @@ namespace DevPython {
             this.menubarMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
             this.menuitemEdit,
+            this.工具TToolStripMenuItem,
             this.debugToolStripMenuItem,
             this.DebugDToolStripMenuItem,
             this.helpToolStripMenuItem});
@@ -338,17 +341,24 @@ namespace DevPython {
             this.DebugDToolStripMenuItem.Size = new System.Drawing.Size(74, 24);
             this.DebugDToolStripMenuItem.Text = "调试(&D)";
             // 
+            // 继续运行CToolStripMenuItem
+            // 
+            this.继续运行CToolStripMenuItem.Name = "继续运行CToolStripMenuItem";
+            this.继续运行CToolStripMenuItem.Size = new System.Drawing.Size(166, 26);
+            this.继续运行CToolStripMenuItem.Text = "继续(&C)";
+            this.继续运行CToolStripMenuItem.Click += new System.EventHandler(this.继续运行CToolStripMenuItem_Click);
+            // 
             // 下一步NToolStripMenuItem
             // 
             this.下一步NToolStripMenuItem.Name = "下一步NToolStripMenuItem";
-            this.下一步NToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
+            this.下一步NToolStripMenuItem.Size = new System.Drawing.Size(166, 26);
             this.下一步NToolStripMenuItem.Text = "下一步(&N)";
             this.下一步NToolStripMenuItem.Click += new System.EventHandler(this.下一步NToolStripMenuItem_Click);
             // 
             // 单步进入SToolStripMenuItem
             // 
             this.单步进入SToolStripMenuItem.Name = "单步进入SToolStripMenuItem";
-            this.单步进入SToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
+            this.单步进入SToolStripMenuItem.Size = new System.Drawing.Size(166, 26);
             this.单步进入SToolStripMenuItem.Text = "单步进入(&S)";
             this.单步进入SToolStripMenuItem.Click += new System.EventHandler(this.单步进入SToolStripMenuItem_Click);
             // 
@@ -386,6 +396,21 @@ namespace DevPython {
             this.DonateToolStripMenuItem.Name = "DonateToolStripMenuItem";
             this.DonateToolStripMenuItem.Size = new System.Drawing.Size(216, 26);
             this.DonateToolStripMenuItem.Text = "赞助...";
+            // 
+            // 工具TToolStripMenuItem
+            // 
+            this.工具TToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.变量替换ToolStripMenuItem});
+            this.工具TToolStripMenuItem.Name = "工具TToolStripMenuItem";
+            this.工具TToolStripMenuItem.Size = new System.Drawing.Size(71, 24);
+            this.工具TToolStripMenuItem.Text = "工具(&T)";
+            // 
+            // 变量替换ToolStripMenuItem
+            // 
+            this.变量替换ToolStripMenuItem.Name = "变量替换ToolStripMenuItem";
+            this.变量替换ToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
+            this.变量替换ToolStripMenuItem.Text = "变量替换...";
+            this.变量替换ToolStripMenuItem.Click += new System.EventHandler(this.变量替换ToolStripMenuItem_Click);
             // 
             // controlStatusBar
             // 
@@ -499,13 +524,6 @@ namespace DevPython {
             this.sciLogArea.Name = "sciLogArea";
             this.sciLogArea.Size = new System.Drawing.Size(829, 179);
             this.sciLogArea.TabIndex = 0;
-            // 
-            // 继续运行CToolStripMenuItem
-            // 
-            this.继续运行CToolStripMenuItem.Name = "继续运行CToolStripMenuItem";
-            this.继续运行CToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
-            this.继续运行CToolStripMenuItem.Text = "继续(&C)";
-            this.继续运行CToolStripMenuItem.Click += new System.EventHandler(this.继续运行CToolStripMenuItem_Click);
             // 
             // Main
             // 
@@ -824,5 +842,7 @@ namespace DevPython {
         private ToolStripMenuItem 下一步NToolStripMenuItem;
         private ToolStripMenuItem 单步进入SToolStripMenuItem;
         private ToolStripMenuItem 继续运行CToolStripMenuItem;
+        private ToolStripMenuItem 工具TToolStripMenuItem;
+        private ToolStripMenuItem 变量替换ToolStripMenuItem;
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 using System.Threading;
@@ -1312,8 +1313,7 @@ namespace DevPython
                 S += "\n\n"; // newline hack
                 Tokenizer t = new Tokenizer(S);
                 grammar g = Grammar._Grammar;
-                //while (true) {
-                for(int i=1; i<10; i++) { 
+                while (true) {
                     _node n = parsetok(t, g, 256);
                     if (n != null)
                     {
@@ -1557,6 +1557,76 @@ namespace DevPython
                 }
             }).Start();
             
+        }
+
+        public static int getname(String S, int pos, out String name, out List<int> namelist)
+        {
+            Tokenizer t = new Tokenizer(S);
+            int type = 0;
+            name = "";
+            namelist = null;
+            while (t.cur < pos)
+            {
+                type = t.get(out name);
+            }
+            if (type != NAME && t.cur == pos)
+            {
+                type = t.get(out name);
+            }
+            if (type != NAME)
+            {
+                name = "";
+                return 0;
+            }
+            int possa = t.cur - name.Length;
+            namelist = new List<int>();
+            String oldname;
+            t = new Tokenizer(S);
+            while (true)
+            {
+                type = t.get(out oldname);
+                if (type == NAME && name == oldname && t.cur-name.Length != possa)
+                {
+                    namelist.Add(t.cur - name.Length);
+                }
+                else if (type == EOF || type == OP)
+                {
+                    break;
+                }
+            }
+            return possa;
+        }
+
+        public static void rename(ref String S, int pos, String newname)
+        {
+            Tokenizer t = new Tokenizer(S);
+            String name = "", oldname;
+            int type = 0;
+            while (t.cur<pos)
+            {
+                type = t.get(out name);
+            }
+            if (type != NAME || name.Length <= 0)
+            {
+                return;
+            }
+            String mid = "";
+            while (mid.Length < name.Length) mid += "@";
+            oldname = name;
+            t = new Tokenizer(S);
+            while (true)
+            {
+                type = t.get(out name);
+                if(type == NAME && name == oldname)
+                {
+                    S = S.Remove(t.cur - name.Length, name.Length).Insert(t.cur - name.Length, mid);
+                }
+                else if(type == EOF || type == OP)
+                {
+                    break;
+                }
+            }
+            S = S.Replace(mid, newname);
         }
 
         #region PRIVATE_FUNCTIONS
