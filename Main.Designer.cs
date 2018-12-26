@@ -59,6 +59,9 @@ namespace DevPython {
             this.menuitemEditReplace = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.menuitemFormatFont = new System.Windows.Forms.ToolStripMenuItem();
+            this.工具TToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.变量替换ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.代码格式化ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.debugToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.runToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.DebuggerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -71,8 +74,6 @@ namespace DevPython {
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.menuitemAbout = new System.Windows.Forms.ToolStripMenuItem();
             this.DonateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.工具TToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.变量替换ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.controlStatusBar = new System.Windows.Forms.StatusStrip();
             this.controlCaretPositionLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
@@ -81,12 +82,11 @@ namespace DevPython {
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.sciOutputArea = new ScintillaNET.Scintilla();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.tabPage3 = new System.Windows.Forms.TabPage();
-            this.sciLogArea = new ScintillaNET.Scintilla();
-            this.代码格式化ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.listView1 = new System.Windows.Forms.ListView();
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.sciLogArea = new ScintillaNET.Scintilla();
             this.menubarMain.SuspendLayout();
             this.controlStatusBar.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -310,6 +310,29 @@ namespace DevPython {
             this.menuitemFormatFont.Size = new System.Drawing.Size(190, 26);
             this.menuitemFormatFont.Text = "字体(&F)";
             // 
+            // 工具TToolStripMenuItem
+            // 
+            this.工具TToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.变量替换ToolStripMenuItem,
+            this.代码格式化ToolStripMenuItem});
+            this.工具TToolStripMenuItem.Name = "工具TToolStripMenuItem";
+            this.工具TToolStripMenuItem.Size = new System.Drawing.Size(71, 24);
+            this.工具TToolStripMenuItem.Text = "工具(&T)";
+            // 
+            // 变量替换ToolStripMenuItem
+            // 
+            this.变量替换ToolStripMenuItem.Name = "变量替换ToolStripMenuItem";
+            this.变量替换ToolStripMenuItem.Size = new System.Drawing.Size(173, 26);
+            this.变量替换ToolStripMenuItem.Text = "变量替换...";
+            this.变量替换ToolStripMenuItem.Click += new System.EventHandler(this.变量替换ToolStripMenuItem_Click);
+            // 
+            // 代码格式化ToolStripMenuItem
+            // 
+            this.代码格式化ToolStripMenuItem.Name = "代码格式化ToolStripMenuItem";
+            this.代码格式化ToolStripMenuItem.Size = new System.Drawing.Size(173, 26);
+            this.代码格式化ToolStripMenuItem.Text = "代码格式化...";
+            this.代码格式化ToolStripMenuItem.Click += new System.EventHandler(this.代码格式化ToolStripMenuItem_Click);
+            // 
             // debugToolStripMenuItem
             // 
             this.debugToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -323,7 +346,7 @@ namespace DevPython {
             // 
             this.runToolStripMenuItem.Name = "runToolStripMenuItem";
             this.runToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F5;
-            this.runToolStripMenuItem.Size = new System.Drawing.Size(140, 26);
+            this.runToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
             this.runToolStripMenuItem.Text = "运行";
             this.runToolStripMenuItem.Click += new System.EventHandler(this.runToolStripMenuItem_Click);
             // 
@@ -331,7 +354,7 @@ namespace DevPython {
             // 
             this.DebuggerToolStripMenuItem.Name = "DebuggerToolStripMenuItem";
             this.DebuggerToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F6;
-            this.DebuggerToolStripMenuItem.Size = new System.Drawing.Size(140, 26);
+            this.DebuggerToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
             this.DebuggerToolStripMenuItem.Text = "调试";
             this.DebuggerToolStripMenuItem.Click += new System.EventHandler(this.DebuggerToolStripMenuItem_Click);
             // 
@@ -402,22 +425,6 @@ namespace DevPython {
             this.DonateToolStripMenuItem.Size = new System.Drawing.Size(216, 26);
             this.DonateToolStripMenuItem.Text = "赞助...";
             // 
-            // 工具TToolStripMenuItem
-            // 
-            this.工具TToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.变量替换ToolStripMenuItem,
-            this.代码格式化ToolStripMenuItem});
-            this.工具TToolStripMenuItem.Name = "工具TToolStripMenuItem";
-            this.工具TToolStripMenuItem.Size = new System.Drawing.Size(71, 24);
-            this.工具TToolStripMenuItem.Text = "工具(&T)";
-            // 
-            // 变量替换ToolStripMenuItem
-            // 
-            this.变量替换ToolStripMenuItem.Name = "变量替换ToolStripMenuItem";
-            this.变量替换ToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
-            this.变量替换ToolStripMenuItem.Text = "变量替换...";
-            this.变量替换ToolStripMenuItem.Click += new System.EventHandler(this.变量替换ToolStripMenuItem_Click);
-            // 
             // controlStatusBar
             // 
             this.controlStatusBar.ImageScalingSize = new System.Drawing.Size(20, 20);
@@ -475,6 +482,7 @@ namespace DevPython {
             this.tabControl1.Controls.Add(this.tabPage2);
             this.tabControl1.Controls.Add(this.tabPage3);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabControl1.Font = new System.Drawing.Font("SimSun", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
@@ -512,6 +520,31 @@ namespace DevPython {
             this.tabPage2.Text = "调试";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
+            // listView1
+            // 
+            this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader1,
+            this.columnHeader2});
+            this.listView1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.listView1.Font = new System.Drawing.Font("SimSun", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.listView1.LabelEdit = true;
+            this.listView1.Location = new System.Drawing.Point(3, 3);
+            this.listView1.Name = "listView1";
+            this.listView1.Size = new System.Drawing.Size(829, 179);
+            this.listView1.TabIndex = 0;
+            this.listView1.UseCompatibleStateImageBehavior = false;
+            this.listView1.View = System.Windows.Forms.View.Details;
+            // 
+            // columnHeader1
+            // 
+            this.columnHeader1.Text = "变量";
+            this.columnHeader1.Width = 230;
+            // 
+            // columnHeader2
+            // 
+            this.columnHeader2.Text = "值";
+            this.columnHeader2.Width = 572;
+            // 
             // tabPage3
             // 
             this.tabPage3.Controls.Add(this.sciLogArea);
@@ -531,37 +564,6 @@ namespace DevPython {
             this.sciLogArea.Name = "sciLogArea";
             this.sciLogArea.Size = new System.Drawing.Size(829, 179);
             this.sciLogArea.TabIndex = 0;
-            // 
-            // 代码格式化ToolStripMenuItem
-            // 
-            this.代码格式化ToolStripMenuItem.Name = "代码格式化ToolStripMenuItem";
-            this.代码格式化ToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
-            this.代码格式化ToolStripMenuItem.Text = "代码格式化...";
-            this.代码格式化ToolStripMenuItem.Click += new System.EventHandler(this.代码格式化ToolStripMenuItem_Click);
-            // 
-            // listView1
-            // 
-            this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeader1,
-            this.columnHeader2});
-            this.listView1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.listView1.LabelEdit = true;
-            this.listView1.Location = new System.Drawing.Point(3, 3);
-            this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(829, 179);
-            this.listView1.TabIndex = 0;
-            this.listView1.UseCompatibleStateImageBehavior = false;
-            this.listView1.View = System.Windows.Forms.View.Details;
-            // 
-            // columnHeader1
-            // 
-            this.columnHeader1.Text = "变量";
-            this.columnHeader1.Width = 230;
-            // 
-            // columnHeader2
-            // 
-            this.columnHeader2.Text = "值";
-            this.columnHeader2.Width = 572;
             // 
             // Main
             // 
@@ -697,7 +699,7 @@ namespace DevPython {
             // Configure the default style
             TextArea.StyleResetDefault();
             TextArea.Styles[Style.Default].Font = "Consolas";
-            TextArea.Styles[Style.Default].Size = 10;
+            TextArea.Styles[Style.Default].Size = 12;
             TextArea.Styles[Style.Default].BackColor = IntToColor(0x212121);
             TextArea.Styles[Style.Default].ForeColor = IntToColor(0x000000);
             TextArea.StyleClearAll();
@@ -787,10 +789,12 @@ namespace DevPython {
                 if((line.MarkerGet()&mask)>0)
                 {
                     line.MarkerDelete(BOOKMARK_MARKER);
+                    breakpoint[TextArea.LineFromPosition(e.Position) + 1] = false;
                 }
                 else
                 {
                     line.MarkerAdd(BOOKMARK_MARKER);
+                    breakpoint[TextArea.LineFromPosition(e.Position) + 1] = true;
                 }
             }
         }
@@ -804,14 +808,20 @@ namespace DevPython {
             margin.Width = 20;
             margin.Sensitive = true;
             margin.Type = MarginType.Symbol;
-            margin.Mask = (1 << BOOKMARK_MARKER);
+            margin.Mask = (1 << BOOKMARK_MARKER) | (1 << 3);
             //margin.Cursor = MarginCursor.Arrow;
 
             var marker = TextArea.Markers[BOOKMARK_MARKER];
-            marker.Symbol = MarkerSymbol.Background;
+            marker.Symbol = MarkerSymbol.Circle;
             marker.SetBackColor(IntToColor(0xFF003B));
             marker.SetForeColor(IntToColor(0x000000));
             marker.SetAlpha(100);
+
+            var marker2 = TextArea.Markers[3];
+            marker2.Symbol = MarkerSymbol.Background;
+            marker2.SetBackColor(IntToColor(0x3575FF));
+            marker2.SetForeColor(IntToColor(0x000000));
+            marker2.SetAlpha(100);
 
             TextArea.MarginClick += scintilla_MarginClick;
 

@@ -1383,10 +1383,12 @@ namespace DevPython
             bool running = false, hasRead = false;
 
             // 设置断点
-            for (int i = 2; i < 3; i++)
-            {
-                p.StandardInput.WriteLine("b " + i.ToString());
-                p.StandardInput.Flush();
+            foreach(var i in M.breakpoint) {
+                if(i.Value)
+                {
+                    p.StandardInput.WriteLine("b " + i.Key.ToString());
+                    p.StandardInput.Flush();
+                }
             }
 
             // bool waitForRead = true, hadRead = false, stepOn = false;
@@ -1422,23 +1424,25 @@ namespace DevPython
                             if (running)
                             {
                                 running = false;
-                                M.printOutput("第"+lineno.ToString()+"行遇到断点停留。");
-
-                                // 刷新断点监视
-                                List<String> ls, lv;
-                                ls = M.getWatch();
-                                lv = new List<String>();
-                                for(int i=0; i<ls.Count; i++)
-                                {
-                                    p.StandardInput.WriteLine("p " + ls[i]);
-                                    p.StandardInput.Flush();
-                                    Thread.Sleep(7);
-                                    string li = p.StandardOutput.ReadLine();
-                                    if (li.StartsWith("(Pdb) ")) li = li.Substring(6);
-                                    lv.Add(li);
-                                }
-                                M.refreshWatch(ls, lv);
+                            // M.printOutput("第"+lineno.ToString()+"行遇到断点停留。");
                             }
+                            // 刷新断点监视
+                            List<String> ls, lv;
+                            ls = M.getWatch();
+                            lv = new List<String>();
+                            for(int i=0; i<ls.Count; i++)
+                            {
+                                p.StandardInput.WriteLine("p " + ls[i]);
+                                p.StandardInput.Flush();
+                                Thread.Sleep(7);
+                                string li = p.StandardOutput.ReadLine();
+                                if (li.StartsWith("(Pdb) ")) li = li.Substring(6);
+                                lv.Add(li);
+                            }
+                            M.refreshWatch(ls, lv);
+
+                            // 刷新当前行号
+                            M.setLine(lineno);
 
                             hasRead = true;
                         }
@@ -1448,6 +1452,7 @@ namespace DevPython
                         else if (line.StartsWith("--Return--") || line.IndexOf("finish")!=-1)
                         { // 程序结束
                             M.printOutput("\n程序已返回。\n");
+                            M.clearLine();
                             p.Close();
                             p = null;
                             M.debugging = false;

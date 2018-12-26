@@ -26,13 +26,39 @@ namespace DevPython {
                 StartPosition = FormStartPosition.Manual;
             }
 
-            Control.CheckForIllegalCrossThreadCalls = false;
+            CheckForIllegalCrossThreadCalls = false;
 
             nows = new List<String>();
             nows.Add("i");
+
+            breakpoint = new Dictionary<int, bool>();
         }
 
-        List<String> nows;
+        static Line __line__ = null;
+
+        public void setLine(int no)
+        {
+            if(__line__ != null)
+            {
+                __line__.MarkerDelete(3);
+            }
+
+            var line = TextArea.Lines[no - 1];
+            line.MarkerAdd(3);
+
+            __line__ = line;
+        }
+
+        public void clearLine()
+        {
+            if (__line__ != null)
+            {
+                __line__.MarkerDelete(3);
+            }
+        }
+
+        public List<String> nows;
+        public Dictionary<int,bool> breakpoint;
 
         public List<String> getWatch()
         {
