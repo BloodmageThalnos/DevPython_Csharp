@@ -660,7 +660,7 @@ namespace DevPython {
             TextArea.Styles[Style.Default].Font = "Consolas";
             TextArea.Styles[Style.Default].Size = 10;
             TextArea.Styles[Style.Default].BackColor = IntToColor(0x212121);
-            TextArea.Styles[Style.Default].ForeColor = IntToColor(0xFFFFFF);
+            TextArea.Styles[Style.Default].ForeColor = IntToColor(0x000000);
             TextArea.StyleClearAll();
 
             // Configure the CPP (C#) lexer styles
@@ -739,6 +739,23 @@ namespace DevPython {
             nums.Mask = 0;
         }
 
+        private void scintilla_MarginClick(object sender,MarginClickEventArgs e)
+        {
+            if(e.Margin==BOOKMARK_MARGIN||e.Margin==NUMBER_MARGIN)
+            {
+                const uint mask = (1 << BOOKMARK_MARKER);
+                var line = TextArea.Lines[TextArea.LineFromPosition(e.Position)];
+                if((line.MarkerGet()&mask)>0)
+                {
+                    line.MarkerDelete(BOOKMARK_MARKER);
+                }
+                else
+                {
+                    line.MarkerAdd(BOOKMARK_MARKER);
+                }
+            }
+        }
+
         private void InitBookmarkMargin()
         {
 
@@ -752,10 +769,12 @@ namespace DevPython {
             //margin.Cursor = MarginCursor.Arrow;
 
             var marker = TextArea.Markers[BOOKMARK_MARKER];
-            marker.Symbol = MarkerSymbol.Circle;
+            marker.Symbol = MarkerSymbol.Background;
             marker.SetBackColor(IntToColor(0xFF003B));
             marker.SetForeColor(IntToColor(0x000000));
             marker.SetAlpha(100);
+
+            TextArea.MarginClick += scintilla_MarginClick;
 
         }
 
