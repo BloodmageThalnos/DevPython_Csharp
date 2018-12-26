@@ -27,6 +27,28 @@ namespace DevPython {
             }
 
             Control.CheckForIllegalCrossThreadCalls = false;
+
+            nows = new List<String>();
+            nows.Add("i");
+        }
+
+        List<String> nows;
+
+        public List<String> getWatch()
+        {
+            return nows;
+        }
+
+        public void refreshWatch(List<String> ls, List<String> lv)
+        {
+            listView1.Items.Clear();
+            for (int i = 0; i < ls.Count; i++)
+            {
+                ListViewItem it = new ListViewItem();
+                it.Text = ls[i];
+                it.SubItems.Add(lv[i]);
+                listView1.Items.Add(it);
+            }
         }
 
         public bool btnNext = false, btnStep = false, btnContinue = false;
@@ -1076,6 +1098,12 @@ Do you want to create a new file?
                     //sciTextArea.CurrentPosition = newp;
                 }
             });
+        }
+
+        private void 代码格式化ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            String s = Content;
+
         }
 
         private void 继续运行CToolStripMenuItem_Click(object sender, EventArgs e)

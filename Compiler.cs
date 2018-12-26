@@ -1423,6 +1423,21 @@ namespace DevPython
                             {
                                 running = false;
                                 M.printOutput("第"+lineno.ToString()+"行遇到断点停留。");
+
+                                // 刷新断点监视
+                                List<String> ls, lv;
+                                ls = M.getWatch();
+                                lv = new List<String>();
+                                for(int i=0; i<ls.Count; i++)
+                                {
+                                    p.StandardInput.WriteLine("p " + ls[i]);
+                                    p.StandardInput.Flush();
+                                    Thread.Sleep(7);
+                                    string li = p.StandardOutput.ReadLine();
+                                    if (li.StartsWith("(Pdb) ")) li = li.Substring(6);
+                                    lv.Add(li);
+                                }
+                                M.refreshWatch(ls, lv);
                             }
 
                             hasRead = true;
