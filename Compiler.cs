@@ -1421,18 +1421,19 @@ namespace DevPython
             M.debugging = true;
             int lineno = 0;
             String line = "";
-            bool sendN = false, sendS = false, sendC = true;
-            bool running = false, hasRead = false, wantRead = false;
-            bool selfLock_1 = false, firstSkip = true;
+            bool sendN = true, sendS = false, sendC = false;
+            bool running = false, hasRead = false, wantRead = false, stepOn = true;
+            bool selfLock_1 = false, firstSkip = false;
 
             // 设置断点
-            foreach(var i in M.breakpoint) {
+            /*foreach(var i in M.breakpoint) {
                 if(i.Value)
                 {
                     p.StandardInput.WriteLine("b " + i.Key.ToString());
                     p.StandardInput.Flush();
                 }
             }
+             */
             
             String name, oldname = "";
             var tt = new Tokenizer(S);
@@ -1476,6 +1477,8 @@ namespace DevPython
                         }
                         M.printLog("found: " + line);
 
+                        if (line == null) return;
+
                         // 删除(Pdb)，可能在任意位置出现，比较bob
                         if (line.StartsWith("(Pdb) ")) line = line.Substring(6);
 
@@ -1512,55 +1515,65 @@ namespace DevPython
                                 // M.printOutput("第"+lineno.ToString()+"行遇到断点停留。");
                             }
 
-                            // 刷新断点监视
-                            new Thread(() =>
+                            // 判断是否遇到断点
+                            if (M.breakpoint.ContainsKey(lineno) && M.breakpoint[lineno])
                             {
-                                if (!selfLock_1)
+                                stepOn = false;
+                            }
+
+                            // 刷新断点监视
+                            if (!stepOn)
+                            {
+                                new Thread(() =>
                                 {
-                                    selfLock_1 = true;
-                                    Thread.Sleep(377); // Wait for input stream to be read
-                                }
-                                else
-                                {
-                                    while (selfLock_1)
+                                    if (!selfLock_1)
                                     {
-                                        Thread.Sleep(7);
+                                        selfLock_1 = true;
+                                        Thread.Sleep(377); // Wait for input stream to be read
+                                }
+                                    else
+                                    {
+                                        while (selfLock_1)
+                                        {
+                                            Thread.Sleep(7);
+                                        }
                                     }
-                                }
-                                List<String> ls, lv;
-                                ls = M.getWatch();
-                                lv = new List<String>();
-                                for (int i = 0; i < ls.Count; i++)
-                                {
-                                    p.StandardInput.WriteLine("p " + ls[i]);
-                                    p.StandardInput.Flush();
-                                    wantRead = true;
-                                    Thread.Sleep(77);
-                                    string li = line;
-                                    if (li.StartsWith("(Pdb) ")) li = li.Substring(6);
-                                    lv.Add(li);
-                                }
-                                M.refreshWatch(ls, lv);
-                                ls = M.getWatch2();
-                                lv = new List<String>();
-                                for (int i = 0; i < ls.Count; i++)
-                                {
-                                    p.StandardInput.WriteLine("p " + ls[i]);
-                                    p.StandardInput.Flush();
-                                    wantRead = true;
-                                    Thread.Sleep(77);
-                                    string li = line;
-                                    if (li.StartsWith("(Pdb) ")) li = li.Substring(6);
-                                    lv.Add(li);
-                                }
-                                M.refreshWatch2(ls, lv);
-                                selfLock_1 = false;
-                            }).Start();
+                                    List<String> ls, lv;
+                                    ls = M.getWatch();
+                                    lv = new List<String>();
+                                    for (int i = 0; i < ls.Count; i++)
+                                    {
+                                        p.StandardInput.WriteLine("p " + ls[i]);
+                                        p.StandardInput.Flush();
+                                        wantRead = true;
+                                        Thread.Sleep(77);
+                                        string li = line;
+                                        if (li.StartsWith("(Pdb) ")) li = li.Substring(6);
+                                        lv.Add(li);
+                                    }
+                                    M.refreshWatch(ls, lv);
+                                    ls = M.getWatch2();
+                                    lv = new List<String>();
+                                    for (int i = 0; i < ls.Count; i++)
+                                    {
+                                        p.StandardInput.WriteLine("p " + ls[i]);
+                                        p.StandardInput.Flush();
+                                        wantRead = true;
+                                        Thread.Sleep(77);
+                                        string li = line;
+                                        if (li.StartsWith("(Pdb) ")) li = li.Substring(6);
+                                        lv.Add(li);
+                                    }
+                                    M.refreshWatch2(ls, lv);
+                                    selfLock_1 = false;
+                                }).Start();
+                            }
                         }
                         else if (line.StartsWith("Breakpoint") || line.StartsWith("End of file"))
                         { // 断点相关
+                            // stepOn = false;
                         }
-                        else if (line.StartsWith("--Return--") || line.IndexOf("finish")!=-1)
+                        else if (line.StartsWith("--Return--") || line.IndexOf("finish")!=-1 || line.IndexOf("SystemExit")!=-1)
                         { // 程序结束
                             M.printOutput("\n程序已返回。\n");
                             M.clearLine();
@@ -1582,7 +1595,7 @@ namespace DevPython
             {
                 while (!hasRead)
                 {
-                    Thread.Sleep(17);
+                    Thread.Sleep(37);
                 }
                 for (;;)
                 {
@@ -1631,23 +1644,20 @@ namespace DevPython
                         Thread.CurrentThread.Abort();
                         return;
                     }
-                   /* if (hadRead)
+                    if (hasRead)
                     {
-                        hadRead = false;
+                        hasRead = false;
 
                         // Bob with lineno
-                        M.printOutput("行号 " + lineno.ToString());
+                        // M.printOutput("行号 " + lineno.ToString());
 
-                        // TODO: 判断是否遇到断点
-                        bool reachBreak = false;
-                        
                         // 如果在继续运行模式，且未遇到断点，就自动下一步
-                        if (!reachBreak && stepOn)
+                        if (stepOn)
                         {
                             sendN = true;
                         }
                         continue;
-                    }*/
+                    }
                     if (M.btnNext)
                     {
                         // 断点状态下按了下一步按钮
@@ -1662,7 +1672,7 @@ namespace DevPython
                     }
                     if (M.btnStep)
                     {
-                        // 断点状态下按了下一步按钮
+                        // 断点状态下按了下一步进入按钮
                         M.btnStep = false;
 
                         // 为防止冲突，先等待sendS释放
@@ -1678,11 +1688,17 @@ namespace DevPython
                         M.btnContinue = false;
 
                         // 为防止冲突，先等待sendC释放
-                        while (sendC)
+                        /*while (sendC)
                         {
                             Thread.Sleep(7);
                         }
-                        sendC = true;
+                        sendC = true;*/
+                        while (sendN)
+                        {
+                            Thread.Sleep(7);
+                        }
+                        sendN = true;
+                        stepOn = true;
                     }
                     Thread.Sleep(7);
                 }

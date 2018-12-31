@@ -49,7 +49,7 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <PlatformTarget>x86</PlatformTarget>
-    <DebugType>pdbonly</DebugType>
+    <DebugType>none</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
@@ -89,19 +89,19 @@
     </Compile>
     <Compile Include="Compiler.cs" />
     <Compile Include="CONST.cs" />
-    <Compile Include="FileDlgExtenders_v10\Enums.cs" />
-    <Compile Include="FileDlgExtenders_v10\Extensions.cs" />
-    <Compile Include="FileDlgExtenders_v10\FileDialogControlBase.cs">
+    <Compile Include="fde\Enums.cs" />
+    <Compile Include="fde\Extensions.cs" />
+    <Compile Include="fde\FileDialogControlBase.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="FileDlgExtenders_v10\FileDialogControlBase.designer.cs">
+    <Compile Include="fde\FileDialogControlBase.designer.cs">
       <DependentUpon>FileDialogControlBase.cs</DependentUpon>
     </Compile>
-    <Compile Include="FileDlgExtenders_v10\HelperTypes.cs">
+    <Compile Include="fde\HelperTypes.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="FileDlgExtenders_v10\structs.cs" />
-    <Compile Include="FileDlgExtenders_v10\Win32.cs" />
+    <Compile Include="fde\structs.cs" />
+    <Compile Include="fde\Win32.cs" />
     <Compile Include="FindDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -156,7 +156,7 @@
     <EmbeddedResource Include="AddWatchDialog.resx">
       <DependentUpon>AddWatchDialog.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FileDlgExtenders_v10\FileDialogControlBase.resx">
+    <EmbeddedResource Include="fde\FileDialogControlBase.resx">
       <DependentUpon>FileDialogControlBase.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FindDialog.resx">
@@ -202,6 +202,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="packages\jacobslusser.ScintillaNET.3.5.10\lib\net40\ScintillaNET.dll" />
     <Content Include="Resources\python35.dll" />
     <None Include="Resources\Icon1.ico" />
     <None Include="BigIcon.png" />

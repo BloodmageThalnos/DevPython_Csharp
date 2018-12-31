@@ -11,12 +11,25 @@ using System.Drawing.Printing;
 using System.Diagnostics;
 using System.Threading;
 using ScintillaNET;
+using System.Reflection;
 
 // TODO: In order to mimic Notepad exactly the status bar should be hidden if Word Wrap is turned off and the option should be disabled. Setting should be restored if Word Wrap is turned back off.
 
 namespace DevPython {
-    public partial class Main : Form {
+    public partial class Main : Form
+    {
+        Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
+        {
+            string dllName = args.Name.Contains(",") ? args.Name.Substring(0, args.Name.IndexOf(',')) : args.Name.Replace(".dll", "");
+            dllName = dllName.Replace(".", "_");
+            if (dllName.EndsWith("_resources")) return null;
+            System.Resources.ResourceManager rm = new System.Resources.ResourceManager(GetType().Namespace + ".Properties.Resources", Assembly.GetExecutingAssembly());
+            byte[] bytes = (byte[])rm.GetObject(dllName);
+            return System.Reflection.Assembly.Load(bytes);
+        }
         public Main() {
+            AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
+
             InitializeComponent();
 
             InitializeTextarea();
@@ -148,6 +161,8 @@ namespace DevPython {
                 }
             };
             
+            _p.Start();
+
             sciOutputArea.CharAdded += new EventHandler<CharAddedEventArgs>((object sender, CharAddedEventArgs e) =>
             {
                 if (_p != null && e.Char == '\n')
@@ -163,8 +178,6 @@ namespace DevPython {
                     _p.StandardInput.WriteLine(input);
                 }
             });
-
-            _p.Start();
 
             // _p.BeginOutputReadLine();
         }
@@ -212,6 +225,9 @@ namespace DevPython {
             };
 
             //_p.Exited += (s, e) => ;
+            
+            _p.Start();
+            
 
             sciOutputArea.CharAdded += new EventHandler<CharAddedEventArgs>((object sender, CharAddedEventArgs e) =>
             {
@@ -229,8 +245,6 @@ namespace DevPython {
                     _p.StandardInput.WriteLine(input);
                 }
             });
-            
-            _p.Start();
 
             //_p.StandardInput.AutoFlush = true;
 
