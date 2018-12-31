@@ -37,3 +37,4 @@ C:\Users\23625\Documents\GitHub\DevPython_Csharp\obj\x86\Debug\DevPython.csproj.
 C:\Users\23625\Documents\GitHub\DevPython_Csharp\obj\x86\Debug\DevPython.csproj.CopyComplete
 C:\Users\23625\Documents\GitHub\DevPython_Csharp\obj\x86\Debug\DevPython.exe
 C:\Users\23625\Documents\GitHub\DevPython_Csharp\obj\x86\Debug\DevPython.pdb
+D:\Project\DevPython\obj\x86\Debug\DevPython.AddWatchDialog.resources

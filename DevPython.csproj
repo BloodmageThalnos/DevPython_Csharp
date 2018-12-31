@@ -81,6 +81,12 @@
     <Compile Include="About.Designer.cs">
       <DependentUpon>About.cs</DependentUpon>
     </Compile>
+    <Compile Include="AddWatchDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AddWatchDialog.Designer.cs">
+      <DependentUpon>AddWatchDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="Compiler.cs" />
     <Compile Include="CONST.cs" />
     <Compile Include="FileDlgExtenders_v10\Enums.cs" />
@@ -146,6 +152,9 @@
     </Compile>
     <EmbeddedResource Include="About.resx">
       <DependentUpon>About.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AddWatchDialog.resx">
+      <DependentUpon>AddWatchDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FileDlgExtenders_v10\FileDialogControlBase.resx">
       <DependentUpon>FileDialogControlBase.cs</DependentUpon>

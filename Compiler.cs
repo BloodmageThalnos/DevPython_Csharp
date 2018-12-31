@@ -1303,6 +1303,47 @@ namespace DevPython
 
     class Compiler
     {
+        public static bool check(String S, Main M)
+        {
+            // 编译
+            try
+            {
+                M.clearLog();
+                M.printLog("开始检查...\n");
+
+                S += "\n\n"; // newline hack
+                Tokenizer t = new Tokenizer(S);
+                grammar g = Grammar._Grammar;
+                while (true)
+                {
+                    _node n = parsetok(t, g, 256);
+                    if (n != null)
+                    {
+                        M.printLog("语法树信息：");
+                        M.printLog(show_node(n));
+                    }
+                    else
+                    {
+                        M.printOutput("语法错误。");
+                        M.showError(t.cur - 3);
+                        return false;
+                    }
+                    if (t.cur >= S.Length - 3)
+                    {
+                        M.printOutput("语法分析结束，没有错误。");
+                        break;
+                    }
+                }
+
+            }
+            catch (Exception e)
+            {
+                M.printOutput("编译器内部错误：\n" + e.ToString());
+                return false;
+            }
+            return true;
+        }
+
         public static void run(String S, Main M)
         {
             // 编译
@@ -1379,8 +1420,10 @@ namespace DevPython
             M.openDebugger(out p);
             M.debugging = true;
             int lineno = 0;
+            String line = "";
             bool sendN = false, sendS = false, sendC = true;
-            bool running = false, hasRead = false;
+            bool running = false, hasRead = false, wantRead = false;
+            bool selfLock_1 = false, firstSkip = true;
 
             // 设置断点
             foreach(var i in M.breakpoint) {
@@ -1389,6 +1432,29 @@ namespace DevPython
                     p.StandardInput.WriteLine("b " + i.Key.ToString());
                     p.StandardInput.Flush();
                 }
+            }
+            
+            String name, oldname = "";
+            var tt = new Tokenizer(S);
+            M.nows2.Clear();
+            var count = 0;
+            while (true)
+            {
+                var type = tt.get(out name);
+                if (type == EQUAL)
+                {
+                    M.addWatch2(oldname);
+                }
+                else if (type == EOF || type == OP)
+                {
+                    break;
+                }
+                else if (type == NEWLINE)
+                {
+                    count++;
+                    if(count == 100) { break; }
+                }
+                oldname = name;
             }
 
             // bool waitForRead = true, hadRead = false, stepOn = false;
@@ -1400,7 +1466,14 @@ namespace DevPython
                     {
                         //waitForRead = false;
 
-                        string line = p.StandardOutput.ReadLine();
+                        line = p.StandardOutput.ReadLine();
+
+                        if (wantRead)
+                        {
+                            wantRead = false;
+                            Thread.Sleep(77);
+                            continue;
+                        }
                         M.printLog("found: " + line);
 
                         // 删除(Pdb)，可能在任意位置出现，比较bob
@@ -1416,35 +1489,73 @@ namespace DevPython
                             {
                                 lineno = lineno * 10 + line[numStart] - '0';
                             }
-                            M.printLog("当前运行第" + lineno.ToString() + "行。\n");
+                            M.printLog("当前运行第" + lineno.ToString() + "行。");
 
                         }
                         else if(line.StartsWith("-> "))
                         { // 当前运行光标位置。
-                            if (running)
-                            {
-                                running = false;
-                            // M.printOutput("第"+lineno.ToString()+"行遇到断点停留。");
-                            }
-                            // 刷新断点监视
-                            List<String> ls, lv;
-                            ls = M.getWatch();
-                            lv = new List<String>();
-                            for(int i=0; i<ls.Count; i++)
-                            {
-                                p.StandardInput.WriteLine("p " + ls[i]);
-                                p.StandardInput.Flush();
-                                Thread.Sleep(7);
-                                string li = p.StandardOutput.ReadLine();
-                                if (li.StartsWith("(Pdb) ")) li = li.Substring(6);
-                                lv.Add(li);
-                            }
-                            M.refreshWatch(ls, lv);
 
                             // 刷新当前行号
                             M.setLine(lineno);
 
                             hasRead = true;
+
+                            if (firstSkip)
+                            {
+                                firstSkip = false;
+                                continue;
+                            }
+
+                            if (running)
+                            {
+                                running = false;
+                                // M.printOutput("第"+lineno.ToString()+"行遇到断点停留。");
+                            }
+
+                            // 刷新断点监视
+                            new Thread(() =>
+                            {
+                                if (!selfLock_1)
+                                {
+                                    selfLock_1 = true;
+                                    Thread.Sleep(377); // Wait for input stream to be read
+                                }
+                                else
+                                {
+                                    while (selfLock_1)
+                                    {
+                                        Thread.Sleep(7);
+                                    }
+                                }
+                                List<String> ls, lv;
+                                ls = M.getWatch();
+                                lv = new List<String>();
+                                for (int i = 0; i < ls.Count; i++)
+                                {
+                                    p.StandardInput.WriteLine("p " + ls[i]);
+                                    p.StandardInput.Flush();
+                                    wantRead = true;
+                                    Thread.Sleep(77);
+                                    string li = line;
+                                    if (li.StartsWith("(Pdb) ")) li = li.Substring(6);
+                                    lv.Add(li);
+                                }
+                                M.refreshWatch(ls, lv);
+                                ls = M.getWatch2();
+                                lv = new List<String>();
+                                for (int i = 0; i < ls.Count; i++)
+                                {
+                                    p.StandardInput.WriteLine("p " + ls[i]);
+                                    p.StandardInput.Flush();
+                                    wantRead = true;
+                                    Thread.Sleep(77);
+                                    string li = line;
+                                    if (li.StartsWith("(Pdb) ")) li = li.Substring(6);
+                                    lv.Add(li);
+                                }
+                                M.refreshWatch2(ls, lv);
+                                selfLock_1 = false;
+                            }).Start();
                         }
                         else if (line.StartsWith("Breakpoint") || line.StartsWith("End of file"))
                         { // 断点相关
@@ -1576,7 +1687,45 @@ namespace DevPython
                     Thread.Sleep(7);
                 }
             }).Start();
-            
+
+            new Thread(() =>
+            {
+                while (true)
+                {
+                    Thread.Sleep(77);
+                    if (M._remoteThread_debug)
+                    {
+                        M._remoteThread_debug = false;
+                        List<String> ls, lv;
+                        ls = M.getWatch();
+                        lv = new List<String>();
+                        for (int i = 0; i < ls.Count; i++)
+                        {
+                            p.StandardInput.WriteLine("p " + ls[i]);
+                            p.StandardInput.Flush();
+                            wantRead = true;
+                            Thread.Sleep(77);
+                            string li = line;
+                            if (li.StartsWith("(Pdb) ")) li = li.Substring(6);
+                            lv.Add(li);
+                        }
+                        M.refreshWatch(ls, lv);
+                        ls = M.getWatch2();
+                        lv = new List<String>();
+                        for (int i = 0; i < ls.Count; i++)
+                        {
+                            p.StandardInput.WriteLine("p " + ls[i]);
+                            p.StandardInput.Flush();
+                            wantRead = true;
+                            Thread.Sleep(77);
+                            string li = line;
+                            if (li.StartsWith("(Pdb) ")) li = li.Substring(6);
+                            lv.Add(li);
+                        }
+                        M.refreshWatch2(ls, lv);
+                    }
+                }
+            }).Start();
         }
 
         public static int getname(String S, int pos, out String name, out List<int> namelist)

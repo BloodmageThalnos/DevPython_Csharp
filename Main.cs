@@ -29,7 +29,8 @@ namespace DevPython {
             CheckForIllegalCrossThreadCalls = false;
 
             nows = new List<String>();
-            nows.Add("i");
+            // nows.Add("i");
+            nows2 = new List<String>();
 
             breakpoint = new Dictionary<int, bool>();
         }
@@ -57,14 +58,21 @@ namespace DevPython {
             }
         }
 
-        public List<String> nows;
         public Dictionary<int,bool> breakpoint;
+        public List<String> nows, nows2;
+        public bool _remoteThread_debug = false, _remoteThread_debug2 = false;
+
+        public void addWatch(String str)
+        {
+            nows.Add(str);
+            _remoteThread_debug = true;
+        }
 
         public List<String> getWatch()
         {
             return nows;
         }
-
+        
         public void refreshWatch(List<String> ls, List<String> lv)
         {
             listView1.Items.Clear();
@@ -77,6 +85,29 @@ namespace DevPython {
             }
         }
 
+        public void addWatch2(String str)
+        {
+            nows2.Add(str);
+            _remoteThread_debug2 = true;
+        }
+
+        public List<String> getWatch2()
+        {
+            return nows2;
+        }
+
+        public void refreshWatch2(List<String> ls, List<String> lv)
+        {
+            listView2.Items.Clear();
+            for (int i = 0; i < ls.Count; i++)
+            {
+                ListViewItem it = new ListViewItem();
+                it.Text = ls[i];
+                it.SubItems.Add(lv[i]);
+                listView2.Items.Add(it);
+            }
+        }
+        
         public bool btnNext = false, btnStep = false, btnContinue = false;
 
         public bool debugging {
@@ -149,9 +180,17 @@ namespace DevPython {
             _p.StartInfo.CreateNoWindow = true;
             _p.StartInfo.RedirectStandardInput = true;
             _p.StartInfo.RedirectStandardOutput = true;
+            _p.StartInfo.RedirectStandardError = true;
             _p.StartInfo.FileName = "python";
             _p.StartInfo.Arguments = Filename;
             _p.OutputDataReceived += (s1, e1) => {
+                if (!string.IsNullOrEmpty(e1.Data))
+                {
+                    string sData = e1.Data;
+                    printOutput(sData);
+                    return;
+                }
+
                 if (_p == null || _p.HasExited || _p == null)
                 {// 处理程序退出
                     printOutput("\n程序已返回。\n");
@@ -162,11 +201,13 @@ namespace DevPython {
                     }
                     return;
                 }
-
+            };
+            _p.ErrorDataReceived += (s1, e1) => {
                 if (!string.IsNullOrEmpty(e1.Data))
                 {
                     string sData = e1.Data;
-                    printOutput(sData);
+                    printLog("Error: " + sData);
+                    return;
                 }
             };
 
@@ -194,6 +235,7 @@ namespace DevPython {
             //_p.StandardInput.AutoFlush = true;
 
             _p.BeginOutputReadLine();
+            _p.BeginErrorReadLine();
 
             //_p.StandardInput.WriteLine("echo off");
 
@@ -248,6 +290,24 @@ namespace DevPython {
         public void clearOutput()
         {
             sciOutputArea.Text = "";
+        }
+
+        public void showError(int pos)
+        {
+            int lineno = TextArea.LineFromPosition(pos);
+
+            var line = TextArea.Lines[lineno ];
+            line.MarkerAdd(4);
+            var once = true;
+
+            TextArea.MouseClick += new MouseEventHandler((object o, MouseEventArgs e)=>
+            {
+                if (once)
+                {
+                    once = false;
+                    line.MarkerDelete(4);
+                }
+            });
         }
 
         private Encoding _encoding = Encoding.ASCII;
@@ -1001,7 +1061,7 @@ Do you want to create a new file?
         
         private void runToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if(Save())
+            if (Save())
                 Compiler.run(Content, this);
         }
         private void DebuggerToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1130,6 +1190,24 @@ Do you want to create a new file?
         {
             String s = Content;
 
+        }
+
+        private void 检查ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Compiler.check(Content, this);
+        }
+
+        private AddWatchDialog awd = null;
+        private void 添加查看ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if(awd == null)
+            {
+                awd = new AddWatchDialog(this);
+            }
+            if (!awd.Visible)
+            {
+                awd.Show();
+            }
         }
 
         private void 继续运行CToolStripMenuItem_Click(object sender, EventArgs e)
