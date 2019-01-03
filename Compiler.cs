@@ -1422,20 +1422,21 @@ namespace DevPython
             int lineno = 0;
             String line = "";
             bool sendN = true, sendS = false, sendC = false;
-            bool running = false, hasRead = false, wantRead = false, stepOn = true;
+            bool running = false, hasRead = false, wantRead = false, stepOn = true, newAutoWatch = false;
             bool selfLock_1 = false, firstSkip = false;
 
             // 设置断点
-            /*foreach(var i in M.breakpoint) {
+            foreach(var i in M.breakpoint) {
                 if(i.Value)
                 {
                     p.StandardInput.WriteLine("b " + i.Key.ToString());
                     p.StandardInput.Flush();
                 }
             }
-             */
-            
-            String name, oldname = "";
+
+            bool test = true;
+            String name = "";
+            List<String> oldname = new List<string>();
             var tt = new Tokenizer(S);
             M.nows2.Clear();
             var count = 0;
@@ -1444,7 +1445,10 @@ namespace DevPython
                 var type = tt.get(out name);
                 if (type == EQUAL)
                 {
-                    M.addWatch2(oldname);
+                    foreach (String o in oldname)
+                    {
+                        M.addWatch2(o);
+                    }
                 }
                 else if (type == EOF || type == OP)
                 {
@@ -1454,8 +1458,22 @@ namespace DevPython
                 {
                     count++;
                     if(count == 100) { break; }
+                }else if(type == NAME)
+                {
+                    if (test)
+                    {
+                        oldname.Add(name);
+                    }
+                    else
+                    {
+                        oldname.Clear();
+                        oldname.Add(name);
+                    }
+                    test = false;
+                }else if(type == COMMA)
+                {
+                    test = true;
                 }
-                oldname = name;
             }
 
             // bool waitForRead = true, hadRead = false, stepOn = false;
@@ -1530,7 +1548,7 @@ namespace DevPython
                                     {
                                         selfLock_1 = true;
                                         Thread.Sleep(377); // Wait for input stream to be read
-                                }
+                                    }
                                     else
                                     {
                                         while (selfLock_1)
@@ -1709,10 +1727,13 @@ namespace DevPython
                 while (true)
                 {
                     Thread.Sleep(77);
+                    List<String> ls, lv;
+
+                    // 手动监视
                     if (M._remoteThread_debug)
                     {
                         M._remoteThread_debug = false;
-                        List<String> ls, lv;
+
                         ls = M.getWatch();
                         lv = new List<String>();
                         for (int i = 0; i < ls.Count; i++)
@@ -1726,6 +1747,12 @@ namespace DevPython
                             lv.Add(li);
                         }
                         M.refreshWatch(ls, lv);
+                    }
+
+                    // 自动监视
+                    if (newAutoWatch) {
+                        newAutoWatch = false;
+
                         ls = M.getWatch2();
                         lv = new List<String>();
                         for (int i = 0; i < ls.Count; i++)

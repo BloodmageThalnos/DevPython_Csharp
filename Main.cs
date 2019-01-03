@@ -114,6 +114,7 @@ namespace DevPython {
             listView2.Items.Clear();
             for (int i = 0; i < ls.Count; i++)
             {
+                if (lv[i].IndexOf("***") != -1) { continue; }
                 ListViewItem it = new ListViewItem();
                 it.Text = ls[i];
                 it.SubItems.Add(lv[i]);
@@ -324,7 +325,7 @@ namespace DevPython {
             });
         }
 
-        private Encoding _encoding = Encoding.ASCII;
+        private Encoding _encoding = Encoding.UTF8;
 
         private string _Filename;
         public string Filename {
@@ -455,7 +456,8 @@ namespace DevPython {
             var PotentialFilename = SaveDialog.MSDialog.FileName;
 
             _encoding = SaveDialog.Encoding;
-            File.WriteAllText(PotentialFilename, Content, _encoding);
+            //File.WriteAllText(PotentialFilename, Content, _encoding);
+            File.WriteAllText(PotentialFilename, Content);
 
             Filename = PotentialFilename;
             IsDirty = false;
@@ -1076,12 +1078,29 @@ Do you want to create a new file?
         private void runToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (Save())
+            {
                 Compiler.run(Content, this);
+            }
         }
         private void DebuggerToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (Save())
+            {
                 Compiler.debug(Content, this);
+            }
+        }
+
+        private void 运行命令行ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (Save())
+            {
+                Process _p;
+                _p = new Process();
+                _p.StartInfo.UseShellExecute = true;
+                _p.StartInfo.FileName = "python";
+                _p.StartInfo.Arguments = Filename;
+                _p.Start();
+            }
         }
 
         private void menuitemFileExit_Click(object sender, EventArgs e)
