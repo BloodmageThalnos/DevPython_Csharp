@@ -1773,7 +1773,7 @@ namespace DevPython
 
         public static int getname(String S, int pos, out String name, out List<int> namelist)
         {
-            Tokenizer t = new Tokenizer(S);
+            Tokenizer t = new Tokenizer(S+"\n\n");
             int type = 0;
             name = "";
             namelist = null;
@@ -1793,15 +1793,15 @@ namespace DevPython
             int possa = t.cur - name.Length;
             namelist = new List<int>();
             String oldname;
-            t = new Tokenizer(S);
-            while (true)
+            t = new Tokenizer(S + "\n\n");
+            for(int i=1; i<=1000; i++)
             {
                 type = t.get(out oldname);
                 if (type == NAME && name == oldname && t.cur-name.Length != possa)
                 {
                     namelist.Add(t.cur - name.Length);
                 }
-                else if (type == EOF || type == OP)
+                else if (type == EOF)
                 {
                     break;
                 }
@@ -1826,7 +1826,7 @@ namespace DevPython
             while (mid.Length < name.Length) mid += "@";
             oldname = name;
             t = new Tokenizer(S);
-            while (true)
+            for (int i = 1; i <= 1000; i++)
             {
                 type = t.get(out name);
                 if(type == NAME && name == oldname)
