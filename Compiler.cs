@@ -1324,13 +1324,12 @@ namespace DevPython
                     }
                     else
                     {
-                        M.printOutput("语法错误。");
                         M.showError(t.cur - 3);
                         return false;
                     }
                     if (t.cur >= S.Length - 3)
                     {
-                        M.printOutput("语法分析结束，没有错误。");
+                        M.printOutput("语法分析结束，没有错误。\n");
                         break;
                     }
                 }
@@ -1344,7 +1343,7 @@ namespace DevPython
             return true;
         }
 
-        public static void run(String S, Main M)
+        public static void run(String S, Main M, bool Console = false)
         {
             // 编译
             try {
@@ -1385,7 +1384,7 @@ namespace DevPython
             M.openProcess();
         }
 
-        public static void debug(String S, Main M)
+        public static void debug(String S, Main M, bool Console=false)
         {
             // 编译
             try
@@ -1417,7 +1416,7 @@ namespace DevPython
             // 运行并调试
             Process p;
             M.printOutput("开始调试" + M.Filename + "...\n");
-            M.openDebugger(out p);
+            M.openDebugger(out p, Console);
             M.debugging = true;
             int lineno = 0;
             String line = "";
@@ -1480,6 +1479,11 @@ namespace DevPython
             new Thread(()=> {
                 for (;;)
                 {
+                    if (p == null)
+                    {
+                        Thread.CurrentThread.Abort();
+                        return;
+                    }
                     // waitForRead 锁会引起读写阻塞，难以处理多行输入，故注释之
                     //if (waitForRead)
                     {
@@ -1706,17 +1710,31 @@ namespace DevPython
                         M.btnContinue = false;
 
                         // 为防止冲突，先等待sendC释放
-                        /*while (sendC)
+                        /*
+                        while (sendC)
                         {
                             Thread.Sleep(7);
                         }
-                        sendC = true;*/
+                        sendC = true;
+                        */
                         while (sendN)
                         {
                             Thread.Sleep(7);
                         }
                         sendN = true;
                         stepOn = true;
+                    }
+                    if (M.btnStop)
+                    {
+                        M.btnStop = false;
+                        M.printOutput("\n调试终止，程序被结束。\n");
+                        M.clearLine();
+                        // p.CancelOutputRead();
+                        p.Kill();
+                        p.Close();
+                        p = null;
+                        M.debugging = false;
+                        Thread.CurrentThread.Abort();
                     }
                     Thread.Sleep(7);
                 }
@@ -1726,6 +1744,12 @@ namespace DevPython
             {
                 while (true)
                 {
+                    if (p == null)
+                    {
+                        Thread.CurrentThread.Abort();
+                        return;
+                    }
+
                     Thread.Sleep(77);
                     List<String> ls, lv;
 

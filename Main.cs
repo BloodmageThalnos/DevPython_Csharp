@@ -121,66 +121,91 @@ namespace DevPython {
                 listView2.Items.Add(it);
             }
         }
-        
-        public bool btnNext = false, btnStep = false, btnContinue = false;
+
+        public bool btnNext = false, btnStep = false, btnContinue = false, btnStop = false;
 
         public bool debugging {
             get { return DebugDToolStripMenuItem.Enabled; }
             set { DebugDToolStripMenuItem.Enabled = value; }
         }
 
-        public void openDebugger(out Process p)
+        public void openDebugger(out Process p, bool Console = false)
         {
             Process _p = null;
             //int ;
             p = _p = new Process();
             _p.StartInfo.UseShellExecute = false;
-            _p.StartInfo.CreateNoWindow = true;
-            _p.StartInfo.RedirectStandardInput = true;
-            _p.StartInfo.RedirectStandardOutput = true;
+            _p.StartInfo.CreateNoWindow = !Console;
             _p.StartInfo.FileName = "python";
             _p.StartInfo.Arguments = "-m pdb " + Filename;
-            _p.OutputDataReceived += (s1, e1) => {
-                if (_p == null || _p.HasExited)
-                { // 处理程序退出
-                    if (_p != null)
-                    {
-                        printOutput("\n程序已返回。");
-                        _p.Close();
-                        _p = null;
-                    }
-                    return;
-                }
-
-                if (!string.IsNullOrEmpty(e1.Data))
-                {
-                    string sData = e1.Data;
-                    {
-                        printOutput(sData);
-                        
-                    }
-                }
-            };
-            
-            _p.Start();
-
-            sciOutputArea.CharAdded += new EventHandler<CharAddedEventArgs>((object sender, CharAddedEventArgs e) =>
+            _p.StartInfo.RedirectStandardOutput = true;
+            _p.StartInfo.RedirectStandardInput = true;
+            if (!Console)
             {
-                if (_p != null && e.Char == '\n')
+                /*_p.OutputDataReceived += (s1, e1) =>
                 {
-                    int i;
-                    for (i = sciOutputArea.CurrentPosition - 2; i >= 0; i--)
-                    {
-                        if (sciOutputArea.Text[i] == '\n') break;
+                    if (_p == null || _p.HasExited || _p == null)
+                    { // 处理程序退出
+                        if (_p != null)
+                        {
+                            printOutput("\n程序已返回。");
+                            _p.Close();
+                            _p = null;
+                        }
+                        return;
                     }
 
-                    string input = sciOutputArea.Text.Substring(i + 1, sciOutputArea.CurrentPosition - i - 3);
-                    
-                    _p.StandardInput.WriteLine(input);
-                }
-            });
+                    if (!string.IsNullOrEmpty(e1.Data))
+                    {
+                        string sData = e1.Data;
+                        {
+                            printOutput(sData);
 
-            // _p.BeginOutputReadLine();
+                        }
+                    }
+                };*/
+
+                /*sciOutputArea.BeforeInsert += new EventHandler<BeforeModificationEventArgs>((object sender, BeforeModificationEventArgs e) => {
+                    if(e.Text.Length>0)printLog("Get: " + e.Text);
+                });*/
+                bool test = true;
+                sciOutputArea.CharAdded += new EventHandler<CharAddedEventArgs>((object sender, CharAddedEventArgs e) =>
+                {
+                    if (!test) return;
+                    try
+                    {
+                        if (_p == null || _p.HasExited)
+                        { // 处理程序退出
+                            if (_p != null)
+                            {
+                                _p.Close();
+                                _p = null;
+                            }
+                            return;
+                        }
+                    }catch(Exception _e)
+                    {
+                        test = false;
+                        return;
+                    }
+
+                    if (e.Char == '\n')
+                    {
+                        int i;
+                        for (i = sciOutputArea.CurrentPosition - 2; i >= 0; i--)
+                        {
+                            if (sciOutputArea.Text[i] == '\n') break;
+                        }
+
+                        string input = sciOutputArea.Text.Substring(i + 1, sciOutputArea.CurrentPosition - i - 3);
+
+                        _p.StandardInput.WriteLine(input);
+                    }
+                });
+
+                // _p.BeginOutputReadLine();
+            }
+            _p.Start();
         }
 
         public void openProcess()
@@ -206,7 +231,7 @@ namespace DevPython {
                 }
 
                 if (_p == null || _p.HasExited || _p == null)
-                {// 处理程序退出
+                { // 处理程序退出
                     printOutput("\n程序已返回。\n");
                     if (_p != null)
                     {
@@ -229,10 +254,29 @@ namespace DevPython {
             
             _p.Start();
             
-
+            bool test = true;
             sciOutputArea.CharAdded += new EventHandler<CharAddedEventArgs>((object sender, CharAddedEventArgs e) =>
             {
-                if(_p!=null && e.Char == '\n')
+                if (!test) return;
+                try { 
+                    if (_p == null || _p.HasExited || _p == null)
+                    { // 处理程序退出
+                        test = false;
+                        if (_p != null)
+                        {
+                            _p.Close();
+                            _p = null;
+                        }
+                        return;
+                    }
+                }
+                catch (Exception _e)
+                {
+                    test = false;
+                    return;
+                }
+
+                if (_p!=null && e.Char == '\n')
                 {
                     int i;
                     for (i=sciOutputArea.CurrentPosition - 2; i>=0; i--)
@@ -311,10 +355,12 @@ namespace DevPython {
         {
             int lineno = TextArea.LineFromPosition(pos);
 
-            var line = TextArea.Lines[lineno ];
-            line.MarkerAdd(4);
-            var once = true;
+            printOutput("第"+(lineno+1)+"行发现语法错误。\n");
 
+            var line = TextArea.Lines[lineno];
+            line.MarkerAdd(4);
+
+            var once = true;
             TextArea.MouseClick += new MouseEventHandler((object o, MouseEventArgs e)=>
             {
                 if (once)
@@ -1102,6 +1148,14 @@ Do you want to create a new file?
                 _p.Start();
             }
         }
+        
+        private void 调试命令行ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (Save())
+            {
+                Compiler.debug(Content, this, true);
+            }
+        }
 
         private void menuitemFileExit_Click(object sender, EventArgs e)
         {
@@ -1253,6 +1307,12 @@ Do you want to create a new file?
         {
             if (!debugging) return;
             btnStep = true;
+        }
+
+        private void 停止调试ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (!debugging) return;
+            btnStop = true;
         }
     }
 }

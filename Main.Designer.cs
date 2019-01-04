@@ -68,6 +68,7 @@ namespace DevPython {
             this.代码格式化ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.debugToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.runToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.运行命令行ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.DebuggerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator9 = new System.Windows.Forms.ToolStripSeparator();
             this.检查ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -76,6 +77,7 @@ namespace DevPython {
             this.继续运行CToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.下一步NToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.单步进入SToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.停止调试ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator8 = new System.Windows.Forms.ToolStripSeparator();
             this.添加查看ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -100,7 +102,7 @@ namespace DevPython {
             this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.sciLogArea = new ScintillaNET.Scintilla();
-            this.运行命令行ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.调试命令行ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menubarMain.SuspendLayout();
             this.controlStatusBar.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -337,14 +339,14 @@ namespace DevPython {
             // 变量替换ToolStripMenuItem
             // 
             this.变量替换ToolStripMenuItem.Name = "变量替换ToolStripMenuItem";
-            this.变量替换ToolStripMenuItem.Size = new System.Drawing.Size(173, 26);
+            this.变量替换ToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
             this.变量替换ToolStripMenuItem.Text = "变量替换...";
             this.变量替换ToolStripMenuItem.Click += new System.EventHandler(this.变量替换ToolStripMenuItem_Click);
             // 
             // 代码格式化ToolStripMenuItem
             // 
             this.代码格式化ToolStripMenuItem.Name = "代码格式化ToolStripMenuItem";
-            this.代码格式化ToolStripMenuItem.Size = new System.Drawing.Size(173, 26);
+            this.代码格式化ToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
             this.代码格式化ToolStripMenuItem.Text = "代码格式化...";
             this.代码格式化ToolStripMenuItem.Click += new System.EventHandler(this.代码格式化ToolStripMenuItem_Click);
             // 
@@ -354,6 +356,7 @@ namespace DevPython {
             this.runToolStripMenuItem,
             this.运行命令行ToolStripMenuItem,
             this.DebuggerToolStripMenuItem,
+            this.调试命令行ToolStripMenuItem,
             this.toolStripSeparator9,
             this.检查ToolStripMenuItem,
             this.检查当前行语法ToolStripMenuItem});
@@ -368,6 +371,14 @@ namespace DevPython {
             this.runToolStripMenuItem.Size = new System.Drawing.Size(253, 26);
             this.runToolStripMenuItem.Text = "运行";
             this.runToolStripMenuItem.Click += new System.EventHandler(this.runToolStripMenuItem_Click);
+            // 
+            // 运行命令行ToolStripMenuItem
+            // 
+            this.运行命令行ToolStripMenuItem.Name = "运行命令行ToolStripMenuItem";
+            this.运行命令行ToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F5)));
+            this.运行命令行ToolStripMenuItem.Size = new System.Drawing.Size(253, 26);
+            this.运行命令行ToolStripMenuItem.Text = "运行（命令行）";
+            this.运行命令行ToolStripMenuItem.Click += new System.EventHandler(this.运行命令行ToolStripMenuItem_Click);
             // 
             // DebuggerToolStripMenuItem
             // 
@@ -402,6 +413,7 @@ namespace DevPython {
             this.继续运行CToolStripMenuItem,
             this.下一步NToolStripMenuItem,
             this.单步进入SToolStripMenuItem,
+            this.停止调试ToolStripMenuItem,
             this.toolStripSeparator8,
             this.添加查看ToolStripMenuItem});
             this.DebugDToolStripMenuItem.Enabled = false;
@@ -412,33 +424,40 @@ namespace DevPython {
             // 继续运行CToolStripMenuItem
             // 
             this.继续运行CToolStripMenuItem.Name = "继续运行CToolStripMenuItem";
-            this.继续运行CToolStripMenuItem.Size = new System.Drawing.Size(172, 26);
+            this.继续运行CToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
             this.继续运行CToolStripMenuItem.Text = "继续(&C)";
             this.继续运行CToolStripMenuItem.Click += new System.EventHandler(this.继续运行CToolStripMenuItem_Click);
             // 
             // 下一步NToolStripMenuItem
             // 
             this.下一步NToolStripMenuItem.Name = "下一步NToolStripMenuItem";
-            this.下一步NToolStripMenuItem.Size = new System.Drawing.Size(172, 26);
+            this.下一步NToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
             this.下一步NToolStripMenuItem.Text = "下一步(&N)";
             this.下一步NToolStripMenuItem.Click += new System.EventHandler(this.下一步NToolStripMenuItem_Click);
             // 
             // 单步进入SToolStripMenuItem
             // 
             this.单步进入SToolStripMenuItem.Name = "单步进入SToolStripMenuItem";
-            this.单步进入SToolStripMenuItem.Size = new System.Drawing.Size(172, 26);
+            this.单步进入SToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
             this.单步进入SToolStripMenuItem.Text = "单步进入(&S)";
             this.单步进入SToolStripMenuItem.Click += new System.EventHandler(this.单步进入SToolStripMenuItem_Click);
+            // 
+            // 停止调试ToolStripMenuItem
+            // 
+            this.停止调试ToolStripMenuItem.Name = "停止调试ToolStripMenuItem";
+            this.停止调试ToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
+            this.停止调试ToolStripMenuItem.Text = "停止调试(&E)";
+            this.停止调试ToolStripMenuItem.Click += new System.EventHandler(this.停止调试ToolStripMenuItem_Click);
             // 
             // toolStripSeparator8
             // 
             this.toolStripSeparator8.Name = "toolStripSeparator8";
-            this.toolStripSeparator8.Size = new System.Drawing.Size(169, 6);
+            this.toolStripSeparator8.Size = new System.Drawing.Size(178, 6);
             // 
             // 添加查看ToolStripMenuItem
             // 
             this.添加查看ToolStripMenuItem.Name = "添加查看ToolStripMenuItem";
-            this.添加查看ToolStripMenuItem.Size = new System.Drawing.Size(172, 26);
+            this.添加查看ToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
             this.添加查看ToolStripMenuItem.Text = "添加查看(&W)";
             this.添加查看ToolStripMenuItem.Click += new System.EventHandler(this.添加查看ToolStripMenuItem_Click);
             // 
@@ -654,13 +673,13 @@ namespace DevPython {
             this.sciLogArea.Size = new System.Drawing.Size(829, 179);
             this.sciLogArea.TabIndex = 1;
             // 
-            // 运行命令行ToolStripMenuItem
+            // 调试命令行ToolStripMenuItem
             // 
-            this.运行命令行ToolStripMenuItem.Name = "运行命令行ToolStripMenuItem";
-            this.运行命令行ToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F5)));
-            this.运行命令行ToolStripMenuItem.Size = new System.Drawing.Size(253, 26);
-            this.运行命令行ToolStripMenuItem.Text = "运行（命令行）";
-            this.运行命令行ToolStripMenuItem.Click += new System.EventHandler(this.运行命令行ToolStripMenuItem_Click);
+            this.调试命令行ToolStripMenuItem.Name = "调试命令行ToolStripMenuItem";
+            this.调试命令行ToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F6)));
+            this.调试命令行ToolStripMenuItem.Size = new System.Drawing.Size(253, 26);
+            this.调试命令行ToolStripMenuItem.Text = "调试（命令行）";
+            this.调试命令行ToolStripMenuItem.Click += new System.EventHandler(this.调试命令行ToolStripMenuItem_Click);
             // 
             // Main
             // 
@@ -1039,5 +1058,7 @@ namespace DevPython {
         private ToolStripMenuItem 检查ToolStripMenuItem;
         private ToolStripMenuItem 检查当前行语法ToolStripMenuItem;
         private ToolStripMenuItem 运行命令行ToolStripMenuItem;
+        private ToolStripMenuItem 停止调试ToolStripMenuItem;
+        private ToolStripMenuItem 调试命令行ToolStripMenuItem;
     }
 }
