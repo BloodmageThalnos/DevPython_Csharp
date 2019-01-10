@@ -46,7 +46,39 @@ namespace DevPython {
             nows2 = new List<String>();
 
             breakpoint = new Dictionary<int, bool>();
+
+            sciOutputArea.Styles[Style.Default].Size = 11;
+            sciLogArea.Styles[Style.Default].Size = 11;
+
+            new Thread(()=>
+            {
+                int X=-1;
+                caretX = new int[50000];
+                
+                while (true)
+                {
+                    if (X != TextArea.CurrentPosition)
+                    {
+                        X = TextArea.CurrentPosition;
+                        if (nochange) nochange = false;
+                        else changiii = true;
+                    }
+                    else if (changiii)
+                    {
+                        changiii = false;
+                        caretX[++caret] = X;
+                        if (maxcaret < caret) maxcaret = caret;
+                    }
+                    Thread.Sleep(377);
+                }
+            }).Start();
+
         }
+        bool changiii = false, nochange = false;
+
+        public int[] caretX;
+
+        public int caret = 0, maxcaret = 0;
 
         static Line __line__ = null;
 
@@ -137,7 +169,7 @@ namespace DevPython {
             _p.StartInfo.UseShellExecute = false;
             _p.StartInfo.CreateNoWindow = !Console;
             _p.StartInfo.FileName = "python";
-            _p.StartInfo.Arguments = "-m pdb " + Filename;
+            _p.StartInfo.Arguments = "-m pdb " + Filename + " " + debugPara;
             _p.StartInfo.RedirectStandardOutput = true;
             _p.StartInfo.RedirectStandardInput = true;
             if (!Console)
@@ -221,7 +253,7 @@ namespace DevPython {
             _p.StartInfo.RedirectStandardOutput = true;
             _p.StartInfo.RedirectStandardError = true;
             _p.StartInfo.FileName = "python";
-            _p.StartInfo.Arguments = Filename;
+            _p.StartInfo.Arguments = Filename + " " + runPara;
             _p.OutputDataReceived += (s1, e1) => {
                 if (!string.IsNullOrEmpty(e1.Data))
                 {
@@ -1282,6 +1314,165 @@ Do you want to create a new file?
         private void 检查ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Compiler.check(Content, this);
+        }
+
+        private void toolStripButton2_Click(object sender, EventArgs e)
+        {
+            if (caretX == null || caret < 1 || caret == maxcaret)
+            {
+                return;
+            }
+            caret++;
+            TextArea.GotoPosition(caretX[caret]);
+            nochange = true;
+        }
+
+        private void toolStripButton5_Click(object sender, EventArgs e)
+        {
+            Save();
+        }
+
+        private void toolStripButton6_Click(object sender, EventArgs e)
+        {
+            SaveAs();
+        }
+
+        private void toolStripButton7_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
+        private void toolStripButton10_Click(object sender, EventArgs e)
+        {
+            menuitemEditReplace_Click(sender, e);
+        }
+
+        private void toolStripButton3_Click(object sender, EventArgs e)
+        {
+            New();
+        }
+
+        private void toolStripButton4_Click(object sender, EventArgs e)
+        {
+            menuitemFileOpen_Click(sender, e);
+        }
+
+        private void toolStripButton9_Click(object sender, EventArgs e)
+        {
+            Find();
+        }
+
+        private void toolStripButton11_Click(object sender, EventArgs e)
+        {
+            Compiler.check(Content, this);
+        }
+
+        private void toolStripButton12_Click(object sender, EventArgs e)
+        {
+            运行命令行ToolStripMenuItem_Click(sender, e);
+        }
+
+        private void toolStripButton13_Click(object sender, EventArgs e)
+        {
+            if (Save())
+            {
+                Compiler.run(Content, this);
+            }
+        }
+
+        private void toolStripButton14_Click(object sender, EventArgs e)
+        {
+            if (Save())
+            {
+                Compiler.debug(Content, this);
+            }
+        }
+
+        private void 继续_Click(object sender, EventArgs e)
+        {
+            if (!debugging) return;
+            btnContinue = true;
+        }
+
+        private void toolStripButton18_Click(object sender, EventArgs e)
+        {
+            if (!debugging) return;
+            btnStop = true;
+        }
+
+        private void toolStripButton16_Click(object sender, EventArgs e)
+        {
+
+            if (!debugging) return;
+            btnNext = true;
+        }
+
+        private void toolStripButton17_Click(object sender, EventArgs e)
+        {
+            if (!debugging) return;
+            btnStep = true;
+        }
+
+        public String runPara = "";
+        public String debugPara = "";
+
+        private ParameterDialog pd = null;
+
+        private void 跳转到上个编辑位置ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (caretX == null || caret < 1)
+            {
+                return;
+            }
+            caret--;
+            TextArea.GotoPosition(caretX[caret]);
+            nochange = true;
+        }
+
+        private void 跳转到下个编辑位置ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (caretX == null || caret < 1 || caret == maxcaret)
+            {
+                return;
+            }
+            caret++;
+            TextArea.GotoPosition(caretX[caret]);
+            nochange = true;
+        }
+
+        private void 在文件夹中显示ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (Save()) {
+                Process _p;
+                _p = new Process();
+                _p.StartInfo.UseShellExecute = true;
+                _p.StartInfo.FileName = "c:\\Windows\\Explorer.exe";
+                _p.StartInfo.Arguments = " /select, \""+ Filename + "\"";
+                _p.Start();
+            }
+        }
+
+        private void 运行参数ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if(pd == null)
+            {
+                pd = new ParameterDialog(this);
+            }
+            if(!pd.Visible)
+            {
+                pd.Show();
+            }
+        }
+
+        private void toolStripButton1_Click(object sender, EventArgs e)
+        {
+            if (caretX == null || caret<1)
+            {
+                return;
+            }
+            caret--;
+            TextArea.GotoPosition(caretX[caret]);
+            nochange = true;
         }
 
         private AddWatchDialog awd = null;

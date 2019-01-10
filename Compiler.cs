@@ -9,24 +9,6 @@ namespace DevPython
 {
     class Tokenizer
     {
-        #region PRIVATE_VARIABLES
-        String _buf;
-        public int buf;
-        public int cur;
-        public int inp;
-        public int start;
-        public int end;
-        public int line_start;
-        public int done;
-        public int indent;
-        public int[] indstack;
-        public bool atbol;
-        public int pendin;
-        public int lineno;
-        public int level;
-        public int cont_line;
-        #endregion
-
         public Tokenizer(String input)
         {
             _buf = input;
@@ -965,6 +947,24 @@ namespace DevPython
         }
         #endregion
 
+        #region PRIVATE_VARIABLES
+        String _buf;
+        public int buf;
+        public int cur;
+        public int inp;
+        public int start;
+        public int end;
+        public int line_start;
+        public int done;
+        public int indent;
+        public int[] indstack;
+        public bool atbol;
+        public int pendin;
+        public int lineno;
+        public int level;
+        public int cont_line;
+        #endregion
+
         #region SOME_CONSTANTS
         static public readonly string[] _TokenNames = {
     "ENDMARKER",
@@ -1898,17 +1898,7 @@ namespace DevPython
                     }
                 }
                 else started = 1;
-                /*
-                if (a != NULL && a >= tok->line_start)
-                {
-                    col_offset = Py_SAFE_DOWNCAST(a - tok->line_start, intptr_t, int);
-                }
-                else
-                {
-                    col_offset = -1;
-                }
-                */
-                // err_ret->error = ...
+
                 error = ps.addToken((int)type, str,
                                        tok.lineno, col_offset);
                 if (error != E_OK)

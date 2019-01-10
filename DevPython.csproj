@@ -124,6 +124,12 @@
       <DependentUpon>Main.cs</DependentUpon>
     </Compile>
     <Compile Include="MoreSettings.cs" />
+    <Compile Include="ParameterDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ParameterDialog.Designer.cs">
+      <DependentUpon>ParameterDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="SaveOpenDialog.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -168,6 +174,9 @@
     <EmbeddedResource Include="Main.resx">
       <DependentUpon>Main.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="ParameterDialog.resx">
+      <DependentUpon>ParameterDialog.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="SaveOpenDialog.resx">
       <DependentUpon>SaveOpenDialog.cs</DependentUpon>
     </EmbeddedResource>
@@ -202,7 +211,29 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\sss171.jpg" />
+    <None Include="Resources\sss17.jpg" />
     <None Include="packages\jacobslusser.ScintillaNET.3.5.10\lib\net40\ScintillaNET.dll" />
+    <None Include="Resources\5_10.gif" />
+    <None Include="Resources\5_11.gif" />
+    <None Include="Resources\5_02.gif" />
+    <None Include="Resources\5_03.gif" />
+    <None Include="Resources\5_04.gif" />
+    <None Include="Resources\5_05.gif" />
+    <None Include="Resources\5_051.gif" />
+    <None Include="Resources\5_06.gif" />
+    <None Include="Resources\5_08.gif" />
+    <None Include="Resources\5_101.gif" />
+    <None Include="Resources\5_13.gif" />
+    <None Include="Resources\5_14.gif" />
+    <None Include="Resources\5_24.gif" />
+    <None Include="Resources\5_25.gif" />
+    <None Include="Resources\5_26.gif" />
+    <None Include="Resources\5_27.gif" />
+    <None Include="Resources\5_29.gif" />
+    <None Include="Resources\5_17.gif" />
+    <None Include="Resources\5_16.gif" />
+    <None Include="Resources\5_31.gif" />
     <Content Include="Resources\python35.dll" />
     <None Include="Resources\Icon1.ico" />
     <None Include="BigIcon.png" />

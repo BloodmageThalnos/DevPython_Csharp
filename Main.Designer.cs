@@ -38,6 +38,7 @@ namespace DevPython {
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Main));
             this.controlContentTextBox = new System.Windows.Forms.TextBox();
             this.menubarMain = new System.Windows.Forms.MenuStrip();
@@ -48,7 +49,6 @@ namespace DevPython {
             this.menuitemFileSave = new System.Windows.Forms.ToolStripMenuItem();
             this.menuitemFileSaveAs = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.menuitemFileExit = new System.Windows.Forms.ToolStripMenuItem();
             this.menuitemEdit = new System.Windows.Forms.ToolStripMenuItem();
             this.menuitemEditUndo = new System.Windows.Forms.ToolStripMenuItem();
@@ -70,9 +70,12 @@ namespace DevPython {
             this.runToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.运行命令行ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.DebuggerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.调试命令行ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator9 = new System.Windows.Forms.ToolStripSeparator();
             this.检查ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.检查当前行语法ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.运行参数ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.DebugDToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.继续运行CToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.下一步NToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -88,6 +91,31 @@ namespace DevPython {
             this.controlStatusBar = new System.Windows.Forms.StatusStrip();
             this.controlCaretPositionLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.toolStripButton3 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton4 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton5 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton6 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton7 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton8 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator10 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator11 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripButton9 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton10 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator12 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripButton11 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton12 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton13 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton14 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator13 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripButton15 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton18 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton16 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton17 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator14 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripComboBox1 = new System.Windows.Forms.ToolStripComboBox();
             this.sciTextArea = new ScintillaNET.Scintilla();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
@@ -102,13 +130,20 @@ namespace DevPython {
             this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.sciLogArea = new ScintillaNET.Scintilla();
-            this.调试命令行ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.toolTip2 = new System.Windows.Forms.ToolTip(this.components);
+            this.跳转到上个编辑位置ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.跳转到下个编辑位置ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator15 = new System.Windows.Forms.ToolStripSeparator();
+            this.在文件夹中显示ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator16 = new System.Windows.Forms.ToolStripSeparator();
             this.menubarMain.SuspendLayout();
             this.controlStatusBar.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
+            this.toolStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -163,7 +198,6 @@ namespace DevPython {
             this.menuitemFileSave,
             this.menuitemFileSaveAs,
             this.toolStripSeparator1,
-            this.toolStripSeparator2,
             this.menuitemFileExit});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(70, 24);
@@ -209,11 +243,6 @@ namespace DevPython {
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
             this.toolStripSeparator1.Size = new System.Drawing.Size(187, 6);
-            // 
-            // toolStripSeparator2
-            // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(187, 6);
             // 
             // menuitemFileExit
             // 
@@ -331,7 +360,12 @@ namespace DevPython {
             // 
             this.工具TToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.变量替换ToolStripMenuItem,
-            this.代码格式化ToolStripMenuItem});
+            this.代码格式化ToolStripMenuItem,
+            this.toolStripSeparator15,
+            this.跳转到上个编辑位置ToolStripMenuItem,
+            this.跳转到下个编辑位置ToolStripMenuItem,
+            this.toolStripSeparator16,
+            this.在文件夹中显示ToolStripMenuItem});
             this.工具TToolStripMenuItem.Name = "工具TToolStripMenuItem";
             this.工具TToolStripMenuItem.Size = new System.Drawing.Size(71, 24);
             this.工具TToolStripMenuItem.Text = "工具(&T)";
@@ -339,14 +373,14 @@ namespace DevPython {
             // 变量替换ToolStripMenuItem
             // 
             this.变量替换ToolStripMenuItem.Name = "变量替换ToolStripMenuItem";
-            this.变量替换ToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
+            this.变量替换ToolStripMenuItem.Size = new System.Drawing.Size(228, 26);
             this.变量替换ToolStripMenuItem.Text = "变量替换...";
             this.变量替换ToolStripMenuItem.Click += new System.EventHandler(this.变量替换ToolStripMenuItem_Click);
             // 
             // 代码格式化ToolStripMenuItem
             // 
             this.代码格式化ToolStripMenuItem.Name = "代码格式化ToolStripMenuItem";
-            this.代码格式化ToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
+            this.代码格式化ToolStripMenuItem.Size = new System.Drawing.Size(228, 26);
             this.代码格式化ToolStripMenuItem.Text = "代码格式化...";
             this.代码格式化ToolStripMenuItem.Click += new System.EventHandler(this.代码格式化ToolStripMenuItem_Click);
             // 
@@ -359,7 +393,9 @@ namespace DevPython {
             this.调试命令行ToolStripMenuItem,
             this.toolStripSeparator9,
             this.检查ToolStripMenuItem,
-            this.检查当前行语法ToolStripMenuItem});
+            this.检查当前行语法ToolStripMenuItem,
+            this.toolStripSeparator2,
+            this.运行参数ToolStripMenuItem});
             this.debugToolStripMenuItem.Name = "debugToolStripMenuItem";
             this.debugToolStripMenuItem.Size = new System.Drawing.Size(72, 24);
             this.debugToolStripMenuItem.Text = "运行(&R)";
@@ -388,6 +424,14 @@ namespace DevPython {
             this.DebuggerToolStripMenuItem.Text = "调试";
             this.DebuggerToolStripMenuItem.Click += new System.EventHandler(this.DebuggerToolStripMenuItem_Click);
             // 
+            // 调试命令行ToolStripMenuItem
+            // 
+            this.调试命令行ToolStripMenuItem.Name = "调试命令行ToolStripMenuItem";
+            this.调试命令行ToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F6)));
+            this.调试命令行ToolStripMenuItem.Size = new System.Drawing.Size(253, 26);
+            this.调试命令行ToolStripMenuItem.Text = "调试（命令行）";
+            this.调试命令行ToolStripMenuItem.Click += new System.EventHandler(this.调试命令行ToolStripMenuItem_Click);
+            // 
             // toolStripSeparator9
             // 
             this.toolStripSeparator9.Name = "toolStripSeparator9";
@@ -407,6 +451,18 @@ namespace DevPython {
             this.检查当前行语法ToolStripMenuItem.Size = new System.Drawing.Size(253, 26);
             this.检查当前行语法ToolStripMenuItem.Text = "检查当前行语法...";
             // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(250, 6);
+            // 
+            // 运行参数ToolStripMenuItem
+            // 
+            this.运行参数ToolStripMenuItem.Name = "运行参数ToolStripMenuItem";
+            this.运行参数ToolStripMenuItem.Size = new System.Drawing.Size(253, 26);
+            this.运行参数ToolStripMenuItem.Text = "运行参数...";
+            this.运行参数ToolStripMenuItem.Click += new System.EventHandler(this.运行参数ToolStripMenuItem_Click);
+            // 
             // DebugDToolStripMenuItem
             // 
             this.DebugDToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -424,40 +480,40 @@ namespace DevPython {
             // 继续运行CToolStripMenuItem
             // 
             this.继续运行CToolStripMenuItem.Name = "继续运行CToolStripMenuItem";
-            this.继续运行CToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
+            this.继续运行CToolStripMenuItem.Size = new System.Drawing.Size(172, 26);
             this.继续运行CToolStripMenuItem.Text = "继续(&C)";
             this.继续运行CToolStripMenuItem.Click += new System.EventHandler(this.继续运行CToolStripMenuItem_Click);
             // 
             // 下一步NToolStripMenuItem
             // 
             this.下一步NToolStripMenuItem.Name = "下一步NToolStripMenuItem";
-            this.下一步NToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
+            this.下一步NToolStripMenuItem.Size = new System.Drawing.Size(172, 26);
             this.下一步NToolStripMenuItem.Text = "下一步(&N)";
             this.下一步NToolStripMenuItem.Click += new System.EventHandler(this.下一步NToolStripMenuItem_Click);
             // 
             // 单步进入SToolStripMenuItem
             // 
             this.单步进入SToolStripMenuItem.Name = "单步进入SToolStripMenuItem";
-            this.单步进入SToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
+            this.单步进入SToolStripMenuItem.Size = new System.Drawing.Size(172, 26);
             this.单步进入SToolStripMenuItem.Text = "单步进入(&S)";
             this.单步进入SToolStripMenuItem.Click += new System.EventHandler(this.单步进入SToolStripMenuItem_Click);
             // 
             // 停止调试ToolStripMenuItem
             // 
             this.停止调试ToolStripMenuItem.Name = "停止调试ToolStripMenuItem";
-            this.停止调试ToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
+            this.停止调试ToolStripMenuItem.Size = new System.Drawing.Size(172, 26);
             this.停止调试ToolStripMenuItem.Text = "停止调试(&E)";
             this.停止调试ToolStripMenuItem.Click += new System.EventHandler(this.停止调试ToolStripMenuItem_Click);
             // 
             // toolStripSeparator8
             // 
             this.toolStripSeparator8.Name = "toolStripSeparator8";
-            this.toolStripSeparator8.Size = new System.Drawing.Size(178, 6);
+            this.toolStripSeparator8.Size = new System.Drawing.Size(169, 6);
             // 
             // 添加查看ToolStripMenuItem
             // 
             this.添加查看ToolStripMenuItem.Name = "添加查看ToolStripMenuItem";
-            this.添加查看ToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
+            this.添加查看ToolStripMenuItem.Size = new System.Drawing.Size(172, 26);
             this.添加查看ToolStripMenuItem.Text = "添加查看(&W)";
             this.添加查看ToolStripMenuItem.Click += new System.EventHandler(this.添加查看ToolStripMenuItem_Click);
             // 
@@ -526,6 +582,7 @@ namespace DevPython {
             // 
             // splitContainer1.Panel1
             // 
+            this.splitContainer1.Panel1.Controls.Add(this.toolStrip1);
             this.splitContainer1.Panel1.Controls.Add(this.sciTextArea);
             // 
             // splitContainer1.Panel2
@@ -535,16 +592,267 @@ namespace DevPython {
             this.splitContainer1.SplitterDistance = 281;
             this.splitContainer1.TabIndex = 3;
             // 
+            // toolStrip1
+            // 
+            this.toolStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripButton3,
+            this.toolStripButton4,
+            this.toolStripButton5,
+            this.toolStripButton6,
+            this.toolStripButton7,
+            this.toolStripButton8,
+            this.toolStripSeparator10,
+            this.toolStripButton1,
+            this.toolStripButton2,
+            this.toolStripSeparator11,
+            this.toolStripButton9,
+            this.toolStripButton10,
+            this.toolStripSeparator12,
+            this.toolStripButton11,
+            this.toolStripButton12,
+            this.toolStripButton13,
+            this.toolStripButton14,
+            this.toolStripSeparator13,
+            this.toolStripButton15,
+            this.toolStripButton18,
+            this.toolStripButton16,
+            this.toolStripButton17,
+            this.toolStripSeparator14,
+            this.toolStripComboBox1});
+            this.toolStrip1.Location = new System.Drawing.Point(0, 0);
+            this.toolStrip1.Name = "toolStrip1";
+            this.toolStrip1.Size = new System.Drawing.Size(843, 28);
+            this.toolStrip1.TabIndex = 1;
+            this.toolStrip1.Text = "toolStrip1";
+            // 
+            // toolStripButton3
+            // 
+            this.toolStripButton3.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton3.Image = global::DevPython.Properties.Resources._5_02;
+            this.toolStripButton3.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton3.Name = "toolStripButton3";
+            this.toolStripButton3.Size = new System.Drawing.Size(24, 25);
+            this.toolStripButton3.Text = "新建";
+            this.toolStripButton3.Click += new System.EventHandler(this.toolStripButton3_Click);
+            // 
+            // toolStripButton4
+            // 
+            this.toolStripButton4.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton4.Image = global::DevPython.Properties.Resources._5_03;
+            this.toolStripButton4.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton4.Name = "toolStripButton4";
+            this.toolStripButton4.Size = new System.Drawing.Size(24, 25);
+            this.toolStripButton4.Text = "打开";
+            this.toolStripButton4.Click += new System.EventHandler(this.toolStripButton4_Click);
+            // 
+            // toolStripButton5
+            // 
+            this.toolStripButton5.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton5.Image = global::DevPython.Properties.Resources._5_04;
+            this.toolStripButton5.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton5.Name = "toolStripButton5";
+            this.toolStripButton5.Size = new System.Drawing.Size(24, 25);
+            this.toolStripButton5.Text = "保存";
+            this.toolStripButton5.Click += new System.EventHandler(this.toolStripButton5_Click);
+            // 
+            // toolStripButton6
+            // 
+            this.toolStripButton6.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton6.Image = global::DevPython.Properties.Resources._5_05;
+            this.toolStripButton6.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton6.Name = "toolStripButton6";
+            this.toolStripButton6.Size = new System.Drawing.Size(24, 25);
+            this.toolStripButton6.Text = "另存为";
+            this.toolStripButton6.Click += new System.EventHandler(this.toolStripButton6_Click);
+            // 
+            // toolStripButton7
+            // 
+            this.toolStripButton7.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton7.Image = global::DevPython.Properties.Resources._5_06;
+            this.toolStripButton7.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton7.Name = "toolStripButton7";
+            this.toolStripButton7.Size = new System.Drawing.Size(24, 25);
+            this.toolStripButton7.Text = "退出";
+            this.toolStripButton7.Click += new System.EventHandler(this.toolStripButton7_Click);
+            // 
+            // toolStripButton8
+            // 
+            this.toolStripButton8.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton8.Image = global::DevPython.Properties.Resources._5_08;
+            this.toolStripButton8.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton8.Name = "toolStripButton8";
+            this.toolStripButton8.Size = new System.Drawing.Size(24, 25);
+            this.toolStripButton8.Text = "打印";
+            // 
+            // toolStripSeparator10
+            // 
+            this.toolStripSeparator10.Name = "toolStripSeparator10";
+            this.toolStripSeparator10.Size = new System.Drawing.Size(6, 28);
+            // 
+            // toolStripButton1
+            // 
+            this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton1.Image = global::DevPython.Properties.Resources._5_10;
+            this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton1.Name = "toolStripButton1";
+            this.toolStripButton1.Size = new System.Drawing.Size(24, 25);
+            this.toolStripButton1.Text = "toolStripButton1";
+            this.toolStripButton1.Click += new System.EventHandler(this.toolStripButton1_Click);
+            // 
+            // toolStripButton2
+            // 
+            this.toolStripButton2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton2.Image = global::DevPython.Properties.Resources._5_11;
+            this.toolStripButton2.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton2.Name = "toolStripButton2";
+            this.toolStripButton2.Size = new System.Drawing.Size(24, 25);
+            this.toolStripButton2.Text = "toolStripButton2";
+            this.toolStripButton2.Click += new System.EventHandler(this.toolStripButton2_Click);
+            // 
+            // toolStripSeparator11
+            // 
+            this.toolStripSeparator11.Name = "toolStripSeparator11";
+            this.toolStripSeparator11.Size = new System.Drawing.Size(6, 28);
+            // 
+            // toolStripButton9
+            // 
+            this.toolStripButton9.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton9.Image = global::DevPython.Properties.Resources._5_13;
+            this.toolStripButton9.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton9.Name = "toolStripButton9";
+            this.toolStripButton9.Size = new System.Drawing.Size(24, 25);
+            this.toolStripButton9.Text = "查找";
+            this.toolStripButton9.Click += new System.EventHandler(this.toolStripButton9_Click);
+            // 
+            // toolStripButton10
+            // 
+            this.toolStripButton10.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton10.Image = global::DevPython.Properties.Resources._5_14;
+            this.toolStripButton10.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton10.Name = "toolStripButton10";
+            this.toolStripButton10.Size = new System.Drawing.Size(24, 25);
+            this.toolStripButton10.Text = "替换";
+            this.toolStripButton10.Click += new System.EventHandler(this.toolStripButton10_Click);
+            // 
+            // toolStripSeparator12
+            // 
+            this.toolStripSeparator12.Name = "toolStripSeparator12";
+            this.toolStripSeparator12.Size = new System.Drawing.Size(6, 28);
+            // 
+            // toolStripButton11
+            // 
+            this.toolStripButton11.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton11.Image = global::DevPython.Properties.Resources._5_24;
+            this.toolStripButton11.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton11.Name = "toolStripButton11";
+            this.toolStripButton11.Size = new System.Drawing.Size(24, 25);
+            this.toolStripButton11.Text = "检查";
+            this.toolStripButton11.Click += new System.EventHandler(this.toolStripButton11_Click);
+            // 
+            // toolStripButton12
+            // 
+            this.toolStripButton12.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton12.Image = global::DevPython.Properties.Resources._5_25;
+            this.toolStripButton12.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton12.Name = "toolStripButton12";
+            this.toolStripButton12.Size = new System.Drawing.Size(24, 25);
+            this.toolStripButton12.Text = "运行（命令行）";
+            this.toolStripButton12.Click += new System.EventHandler(this.toolStripButton12_Click);
+            // 
+            // toolStripButton13
+            // 
+            this.toolStripButton13.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton13.Image = global::DevPython.Properties.Resources._5_26;
+            this.toolStripButton13.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton13.Name = "toolStripButton13";
+            this.toolStripButton13.Size = new System.Drawing.Size(24, 25);
+            this.toolStripButton13.Text = "运行";
+            this.toolStripButton13.Click += new System.EventHandler(this.toolStripButton13_Click);
+            // 
+            // toolStripButton14
+            // 
+            this.toolStripButton14.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton14.Image = global::DevPython.Properties.Resources._5_27;
+            this.toolStripButton14.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton14.Name = "toolStripButton14";
+            this.toolStripButton14.Size = new System.Drawing.Size(24, 25);
+            this.toolStripButton14.Text = "调试";
+            this.toolStripButton14.Click += new System.EventHandler(this.toolStripButton14_Click);
+            // 
+            // toolStripSeparator13
+            // 
+            this.toolStripSeparator13.Name = "toolStripSeparator13";
+            this.toolStripSeparator13.Size = new System.Drawing.Size(6, 28);
+            // 
+            // toolStripButton15
+            // 
+            this.toolStripButton15.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton15.Image = global::DevPython.Properties.Resources._5_29;
+            this.toolStripButton15.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton15.Name = "toolStripButton15";
+            this.toolStripButton15.Size = new System.Drawing.Size(24, 25);
+            this.toolStripButton15.Text = "toolStripButton15";
+            this.toolStripButton15.ToolTipText = "继续";
+            this.toolStripButton15.Click += new System.EventHandler(this.继续_Click);
+            // 
+            // toolStripButton18
+            // 
+            this.toolStripButton18.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton18.Image = global::DevPython.Properties.Resources.sss171;
+            this.toolStripButton18.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton18.Name = "toolStripButton18";
+            this.toolStripButton18.Size = new System.Drawing.Size(24, 25);
+            this.toolStripButton18.Text = "停止";
+            this.toolStripButton18.ToolTipText = "停止调试";
+            this.toolStripButton18.Click += new System.EventHandler(this.toolStripButton18_Click);
+            // 
+            // toolStripButton16
+            // 
+            this.toolStripButton16.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton16.Image = global::DevPython.Properties.Resources._5_17;
+            this.toolStripButton16.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton16.Name = "toolStripButton16";
+            this.toolStripButton16.Size = new System.Drawing.Size(24, 25);
+            this.toolStripButton16.Text = "下一步";
+            this.toolStripButton16.Click += new System.EventHandler(this.toolStripButton16_Click);
+            // 
+            // toolStripButton17
+            // 
+            this.toolStripButton17.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton17.Image = global::DevPython.Properties.Resources._5_16;
+            this.toolStripButton17.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton17.Name = "toolStripButton17";
+            this.toolStripButton17.Size = new System.Drawing.Size(24, 25);
+            this.toolStripButton17.Text = "toolStripButton17";
+            this.toolStripButton17.ToolTipText = "单步进入";
+            this.toolStripButton17.Click += new System.EventHandler(this.toolStripButton17_Click);
+            // 
+            // toolStripSeparator14
+            // 
+            this.toolStripSeparator14.Name = "toolStripSeparator14";
+            this.toolStripSeparator14.Size = new System.Drawing.Size(6, 28);
+            // 
+            // toolStripComboBox1
+            // 
+            this.toolStripComboBox1.AutoSize = false;
+            this.toolStripComboBox1.DropDownWidth = 150;
+            this.toolStripComboBox1.Name = "toolStripComboBox1";
+            this.toolStripComboBox1.Size = new System.Drawing.Size(121, 28);
+            this.toolStripComboBox1.Text = "Python 3.6.1 64-bit Debug";
+            // 
             // sciTextArea
             // 
+            this.sciTextArea.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.sciTextArea.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.sciTextArea.Dock = System.Windows.Forms.DockStyle.Fill;
             this.sciTextArea.FontQuality = ScintillaNET.FontQuality.LcdOptimized;
             this.sciTextArea.HScrollBar = false;
             this.sciTextArea.Lexer = ScintillaNET.Lexer.Python;
-            this.sciTextArea.Location = new System.Drawing.Point(0, 0);
+            this.sciTextArea.Location = new System.Drawing.Point(0, 31);
             this.sciTextArea.Name = "sciTextArea";
-            this.sciTextArea.Size = new System.Drawing.Size(843, 281);
+            this.sciTextArea.Size = new System.Drawing.Size(843, 250);
             this.sciTextArea.TabIndex = 0;
             // 
             // tabControl1
@@ -673,13 +981,36 @@ namespace DevPython {
             this.sciLogArea.Size = new System.Drawing.Size(829, 179);
             this.sciLogArea.TabIndex = 1;
             // 
-            // 调试命令行ToolStripMenuItem
+            // 跳转到上个编辑位置ToolStripMenuItem
             // 
-            this.调试命令行ToolStripMenuItem.Name = "调试命令行ToolStripMenuItem";
-            this.调试命令行ToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F6)));
-            this.调试命令行ToolStripMenuItem.Size = new System.Drawing.Size(253, 26);
-            this.调试命令行ToolStripMenuItem.Text = "调试（命令行）";
-            this.调试命令行ToolStripMenuItem.Click += new System.EventHandler(this.调试命令行ToolStripMenuItem_Click);
+            this.跳转到上个编辑位置ToolStripMenuItem.Name = "跳转到上个编辑位置ToolStripMenuItem";
+            this.跳转到上个编辑位置ToolStripMenuItem.Size = new System.Drawing.Size(228, 26);
+            this.跳转到上个编辑位置ToolStripMenuItem.Text = "跳转到上个编辑位置";
+            this.跳转到上个编辑位置ToolStripMenuItem.Click += new System.EventHandler(this.跳转到上个编辑位置ToolStripMenuItem_Click);
+            // 
+            // 跳转到下个编辑位置ToolStripMenuItem
+            // 
+            this.跳转到下个编辑位置ToolStripMenuItem.Name = "跳转到下个编辑位置ToolStripMenuItem";
+            this.跳转到下个编辑位置ToolStripMenuItem.Size = new System.Drawing.Size(228, 26);
+            this.跳转到下个编辑位置ToolStripMenuItem.Text = "跳转到下个编辑位置";
+            this.跳转到下个编辑位置ToolStripMenuItem.Click += new System.EventHandler(this.跳转到下个编辑位置ToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator15
+            // 
+            this.toolStripSeparator15.Name = "toolStripSeparator15";
+            this.toolStripSeparator15.Size = new System.Drawing.Size(225, 6);
+            // 
+            // 在文件夹中显示ToolStripMenuItem
+            // 
+            this.在文件夹中显示ToolStripMenuItem.Name = "在文件夹中显示ToolStripMenuItem";
+            this.在文件夹中显示ToolStripMenuItem.Size = new System.Drawing.Size(228, 26);
+            this.在文件夹中显示ToolStripMenuItem.Text = "在文件夹中显示";
+            this.在文件夹中显示ToolStripMenuItem.Click += new System.EventHandler(this.在文件夹中显示ToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator16
+            // 
+            this.toolStripSeparator16.Name = "toolStripSeparator16";
+            this.toolStripSeparator16.Size = new System.Drawing.Size(225, 6);
             // 
             // Main
             // 
@@ -703,9 +1034,12 @@ namespace DevPython {
             this.controlStatusBar.ResumeLayout(false);
             this.controlStatusBar.PerformLayout();
             this.splitContainer1.Panel1.ResumeLayout(false);
+            this.splitContainer1.Panel1.PerformLayout();
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
+            this.toolStrip1.ResumeLayout(false);
+            this.toolStrip1.PerformLayout();
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
@@ -810,6 +1144,7 @@ namespace DevPython {
         {
 
             TextArea.SetSelectionBackColor(true, IntToColor(0x114D9C));
+            
         }
 
         private void InitSyntaxColoring()
@@ -893,7 +1228,7 @@ namespace DevPython {
 
         private void InitNumberMargin()
         {
-
+            TextArea.CaretForeColor = IntToColor(0xFFFFFF);
             TextArea.Styles[Style.LineNumber].BackColor = IntToColor(BACK_COLOR);
             TextArea.Styles[Style.LineNumber].ForeColor = IntToColor(FORE_COLOR);
             TextArea.Styles[Style.IndentGuide].ForeColor = IntToColor(FORE_COLOR);
@@ -1004,7 +1339,6 @@ namespace DevPython {
         private System.Windows.Forms.ToolStripMenuItem menuitemFileSave;
         private System.Windows.Forms.ToolStripMenuItem menuitemFileSaveAs;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripMenuItem menuitemEdit;
         private System.Windows.Forms.ToolStripMenuItem menuitemEditFind;
         private System.Windows.Forms.ToolStripMenuItem menuitemEditFindNext;
@@ -1060,5 +1394,39 @@ namespace DevPython {
         private ToolStripMenuItem 运行命令行ToolStripMenuItem;
         private ToolStripMenuItem 停止调试ToolStripMenuItem;
         private ToolStripMenuItem 调试命令行ToolStripMenuItem;
+        private ToolTip toolTip1;
+        private ToolTip toolTip2;
+        private ToolStrip toolStrip1;
+        private ToolStripButton toolStripButton1;
+        private ToolStripButton toolStripButton2;
+        private ToolStripSeparator toolStripSeparator10;
+        private ToolStripButton toolStripButton3;
+        private ToolStripButton toolStripButton4;
+        private ToolStripButton toolStripButton5;
+        private ToolStripButton toolStripButton6;
+        private ToolStripButton toolStripButton7;
+        private ToolStripButton toolStripButton8;
+        private ToolStripButton toolStripButton9;
+        private ToolStripSeparator toolStripSeparator11;
+        private ToolStripButton toolStripButton10;
+        private ToolStripSeparator toolStripSeparator12;
+        private ToolStripComboBox toolStripComboBox1;
+        private ToolStripButton toolStripButton11;
+        private ToolStripButton toolStripButton12;
+        private ToolStripButton toolStripButton13;
+        private ToolStripButton toolStripButton14;
+        private ToolStripSeparator toolStripSeparator13;
+        private ToolStripButton toolStripButton15;
+        private ToolStripButton toolStripButton16;
+        private ToolStripButton toolStripButton17;
+        private ToolStripButton toolStripButton18;
+        private ToolStripSeparator toolStripSeparator14;
+        private ToolStripSeparator toolStripSeparator2;
+        private ToolStripMenuItem 运行参数ToolStripMenuItem;
+        private ToolStripSeparator toolStripSeparator15;
+        private ToolStripMenuItem 跳转到上个编辑位置ToolStripMenuItem;
+        private ToolStripMenuItem 跳转到下个编辑位置ToolStripMenuItem;
+        private ToolStripSeparator toolStripSeparator16;
+        private ToolStripMenuItem 在文件夹中显示ToolStripMenuItem;
     }
 }
