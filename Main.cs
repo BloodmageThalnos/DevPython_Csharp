@@ -1452,6 +1452,69 @@ Do you want to create a new file?
             }
         }
 
+        private void 批量注释ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            String s = Content, newS;
+            bool findn = false;
+            if (TextArea.SelectionStart == TextArea.SelectionEnd)
+                return;
+            int St = TextArea.SelectionStart, Ed = TextArea.SelectionEnd;
+            newS = Content.Substring(0, St);
+            newS += "# ";
+            for (int i = St; i < Ed; i++)
+            {
+                char now = Content[i];
+                if (findn)
+                {
+                    if (now == ' ')
+                    {
+                    }
+                    else
+                    {
+                        if (now == '#') { }
+                        else
+                        {
+                            newS += "# ";
+                        }
+                        findn = false;
+                    }
+                }
+                newS += now;
+                if (now == '\n')
+                {
+                    findn = true;   
+                }
+            }
+            newS+= Content.Substring(Ed);
+            Content = newS;
+        }
+
+        private void 批量取消注释ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            String s = Content, newS;
+            if (TextArea.SelectionStart == TextArea.SelectionEnd)
+                return;
+            int St = TextArea.SelectionStart, Ed = TextArea.SelectionEnd;
+            newS = Content.Substring(0, St);
+            for (int i = St; i < Ed; i++)
+            {
+                char now = Content[i];
+                if (now == '#')
+                {
+                    if (Content[i + 1] == ' ')
+                    {
+                        i++;
+                    }
+                }
+                else
+                {
+                    newS += now;
+                }
+            }
+            newS += Content.Substring(Ed);
+            Content = newS;
+        }
+
         private void 运行参数ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if(pd == null)
