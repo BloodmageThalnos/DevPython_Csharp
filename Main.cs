@@ -57,6 +57,10 @@ namespace DevPython {
                 
                 while (true)
                 {
+                    if (this.Visible)
+                    {
+
+                    }
                     if (X != TextArea.CurrentPosition)
                     {
                         X = TextArea.CurrentPosition;
@@ -572,14 +576,14 @@ namespace DevPython {
                 }
 
                 if (!FileExists) {
-                    #region Message
+#region Message
 
                     var Message = @"Cannot find the {Filename} file.
 
 Do you want to create a new file?
 ".FormatUsingObject(new { Filename = Filename });
 
-                    #endregion
+#endregion
 
                     var Result = MessageBox.Show(Message, "Dev Python", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
 
@@ -596,7 +600,7 @@ Do you want to create a new file?
                 }
             }
 
-            #region Determine Encoding
+#region Determine Encoding
 
             if (encoding == null) { // generally this means it was not opened by a user using the open file dialog
                 using (var streamReader = new StreamReader(Filename, detectEncodingFromByteOrderMarks: true)) {
@@ -605,7 +609,7 @@ Do you want to create a new file?
                 }
             }
 
-            #endregion
+#endregion
 
             // Content = ReadAllText(Filename, encoding);
 
@@ -1307,8 +1311,42 @@ Do you want to create a new file?
 
         private void 代码格式化ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            String s = Content;
-
+            String s = Content, newS, spaces = "";
+            if (TextArea.SelectionStart == TextArea.SelectionEnd) return;
+            int St = TextArea.SelectionStart, Ed = TextArea.SelectionEnd;
+            bool nospace = false;
+            newS = Content.Substring(0, St);
+            for(int i=St; i<Ed; i++)
+            {
+                char now = Content[i];
+                if (now == ',')
+                {
+                    newS += ", ";
+                    spaces = "";
+                    nospace = true;
+                }
+                else if ("+-*".IndexOf(now) != -1)
+                {
+                    newS += " "+now+" ";
+                    spaces = "";
+                    nospace = true;
+                }
+                else if (now == ' ')
+                {
+                    spaces += " ";
+                }
+                else
+                {
+                    if (nospace)
+                        newS += Content[i];
+                    else
+                        newS += spaces + Content[i];
+                    spaces = "";
+                    nospace = false;
+                }
+            }
+            newS += Content.Substring(Ed);
+            Content = newS;
         }
 
         private void 检查ToolStripMenuItem_Click(object sender, EventArgs e)

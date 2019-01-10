@@ -13,7 +13,7 @@ namespace DevPython {
     partial class Main {
         void InitContent()
         {
-            TextArea.Text = "# Test example\ndef calc(s,low,high):\n    if low == high:\n        return s[low],s[low],s[low],s[low]\n    a,b,c,d = calc(s, low, (low + high)//2)\n    e, f, g, h = calc(s, (low + high)//2+1,high)\n    return a + e,max(b, a + f),max(g, c + e),max(d, h, c + f)\n\nprint('请输入元素个数：')\nn = int(input())\nprint('请输入每个元素的值：')\ns = list(map(int, input().split()))\nprint('最大连续子段和：')\nprint(calc(s, 0, len(s) - 1)[3])";
+            TextArea.Text = "# Test example\ndef calc(s,low,high):\n    if low == high:\n        return s[low],s[low],s[low],s[low]\n    a,b,c,d=calc(s,low,(low+high)//2)\n    e, f, g, h = calc(s, (low + high)//2+1,high)\n    return a + e,max(b, a + f),max(g, c + e),max(d, h, c + f)\n\nprint('请输入元素个数：')\nn = int(input())\nprint('请输入每个元素的值：')\ns = list(map(int, input().split()))\nprint('最大连续子段和：')\nprint(calc(s, 0, len(s) - 1)[3])";
         }
         /// <summary>
         /// Required designer variable.
@@ -66,6 +66,11 @@ namespace DevPython {
             this.工具TToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.变量替换ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.代码格式化ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator15 = new System.Windows.Forms.ToolStripSeparator();
+            this.跳转到上个编辑位置ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.跳转到下个编辑位置ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator16 = new System.Windows.Forms.ToolStripSeparator();
+            this.在文件夹中显示ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.debugToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.runToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.运行命令行ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -132,11 +137,6 @@ namespace DevPython {
             this.sciLogArea = new ScintillaNET.Scintilla();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.toolTip2 = new System.Windows.Forms.ToolTip(this.components);
-            this.跳转到上个编辑位置ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.跳转到下个编辑位置ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator15 = new System.Windows.Forms.ToolStripSeparator();
-            this.在文件夹中显示ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator16 = new System.Windows.Forms.ToolStripSeparator();
             this.menubarMain.SuspendLayout();
             this.controlStatusBar.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -383,6 +383,37 @@ namespace DevPython {
             this.代码格式化ToolStripMenuItem.Size = new System.Drawing.Size(228, 26);
             this.代码格式化ToolStripMenuItem.Text = "代码格式化...";
             this.代码格式化ToolStripMenuItem.Click += new System.EventHandler(this.代码格式化ToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator15
+            // 
+            this.toolStripSeparator15.Name = "toolStripSeparator15";
+            this.toolStripSeparator15.Size = new System.Drawing.Size(225, 6);
+            // 
+            // 跳转到上个编辑位置ToolStripMenuItem
+            // 
+            this.跳转到上个编辑位置ToolStripMenuItem.Name = "跳转到上个编辑位置ToolStripMenuItem";
+            this.跳转到上个编辑位置ToolStripMenuItem.Size = new System.Drawing.Size(228, 26);
+            this.跳转到上个编辑位置ToolStripMenuItem.Text = "跳转到上个编辑位置";
+            this.跳转到上个编辑位置ToolStripMenuItem.Click += new System.EventHandler(this.跳转到上个编辑位置ToolStripMenuItem_Click);
+            // 
+            // 跳转到下个编辑位置ToolStripMenuItem
+            // 
+            this.跳转到下个编辑位置ToolStripMenuItem.Name = "跳转到下个编辑位置ToolStripMenuItem";
+            this.跳转到下个编辑位置ToolStripMenuItem.Size = new System.Drawing.Size(228, 26);
+            this.跳转到下个编辑位置ToolStripMenuItem.Text = "跳转到下个编辑位置";
+            this.跳转到下个编辑位置ToolStripMenuItem.Click += new System.EventHandler(this.跳转到下个编辑位置ToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator16
+            // 
+            this.toolStripSeparator16.Name = "toolStripSeparator16";
+            this.toolStripSeparator16.Size = new System.Drawing.Size(225, 6);
+            // 
+            // 在文件夹中显示ToolStripMenuItem
+            // 
+            this.在文件夹中显示ToolStripMenuItem.Name = "在文件夹中显示ToolStripMenuItem";
+            this.在文件夹中显示ToolStripMenuItem.Size = new System.Drawing.Size(228, 26);
+            this.在文件夹中显示ToolStripMenuItem.Text = "在文件夹中显示";
+            this.在文件夹中显示ToolStripMenuItem.Click += new System.EventHandler(this.在文件夹中显示ToolStripMenuItem_Click);
             // 
             // debugToolStripMenuItem
             // 
@@ -981,37 +1012,6 @@ namespace DevPython {
             this.sciLogArea.Size = new System.Drawing.Size(829, 179);
             this.sciLogArea.TabIndex = 1;
             // 
-            // 跳转到上个编辑位置ToolStripMenuItem
-            // 
-            this.跳转到上个编辑位置ToolStripMenuItem.Name = "跳转到上个编辑位置ToolStripMenuItem";
-            this.跳转到上个编辑位置ToolStripMenuItem.Size = new System.Drawing.Size(228, 26);
-            this.跳转到上个编辑位置ToolStripMenuItem.Text = "跳转到上个编辑位置";
-            this.跳转到上个编辑位置ToolStripMenuItem.Click += new System.EventHandler(this.跳转到上个编辑位置ToolStripMenuItem_Click);
-            // 
-            // 跳转到下个编辑位置ToolStripMenuItem
-            // 
-            this.跳转到下个编辑位置ToolStripMenuItem.Name = "跳转到下个编辑位置ToolStripMenuItem";
-            this.跳转到下个编辑位置ToolStripMenuItem.Size = new System.Drawing.Size(228, 26);
-            this.跳转到下个编辑位置ToolStripMenuItem.Text = "跳转到下个编辑位置";
-            this.跳转到下个编辑位置ToolStripMenuItem.Click += new System.EventHandler(this.跳转到下个编辑位置ToolStripMenuItem_Click);
-            // 
-            // toolStripSeparator15
-            // 
-            this.toolStripSeparator15.Name = "toolStripSeparator15";
-            this.toolStripSeparator15.Size = new System.Drawing.Size(225, 6);
-            // 
-            // 在文件夹中显示ToolStripMenuItem
-            // 
-            this.在文件夹中显示ToolStripMenuItem.Name = "在文件夹中显示ToolStripMenuItem";
-            this.在文件夹中显示ToolStripMenuItem.Size = new System.Drawing.Size(228, 26);
-            this.在文件夹中显示ToolStripMenuItem.Text = "在文件夹中显示";
-            this.在文件夹中显示ToolStripMenuItem.Click += new System.EventHandler(this.在文件夹中显示ToolStripMenuItem_Click);
-            // 
-            // toolStripSeparator16
-            // 
-            this.toolStripSeparator16.Name = "toolStripSeparator16";
-            this.toolStripSeparator16.Size = new System.Drawing.Size(225, 6);
-            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
@@ -1064,6 +1064,8 @@ namespace DevPython {
             TextArea.WrapMode = WrapMode.Word;
             TextArea.IndentationGuides = IndentView.LookBoth;
             TextArea.WrapIndentMode = WrapIndentMode.Indent;
+
+            
 
             // STYLING
             InitColors();
