@@ -13,7 +13,7 @@ namespace DevPython {
     partial class Main {
         void InitContent()
         {
-            TextArea.Text = "# Test example\ndef calc(s,low,high):\n    if low == high:\n        return s[low],s[low],s[low],s[low]\n    a,b,c,d=calc(s,low,(low+high)//2)\n    e, f, g, h = calc(s, (low + high)//2+1,high)\n    return a + e,max(b, a + f),max(g, c + e),max(d, h, c + f)\n\nprint('请输入元素个数：')\nn = int(input())\nprint('请输入每个元素的值：')\ns = list(map(int, input().split()))\nprint('最大连续子段和：')\nprint(calc(s, 0, len(s) - 1)[3])";
+            TextArea.Text = "# Test example\ndef calc(s,low,high):\n    if low == high:\n        return s[low],s[low],s[low],s[low]\n    a,b,c,d=calc(s,low,(low+high)//2)\n    e, f, g, h = calc(s, (low + high)//2+1,high)\n    return a + e,max(b, a + f),max(g, c + e),max(d, h, c + f)\n\nprint('请输入元素个数：')\nn = int(input())\nprint('请输入每个元素的值：')\ns = list(map(int, input().split()))\nprint('最大连续子段和：')\nprint(calc(s, 0, len(s)-1)[3])";
         }
         /// <summary>
         /// Required designer variable.
@@ -71,6 +71,7 @@ namespace DevPython {
             this.跳转到下个编辑位置ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator16 = new System.Windows.Forms.ToolStripSeparator();
             this.在文件夹中显示ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator17 = new System.Windows.Forms.ToolStripSeparator();
             this.批量注释ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.批量取消注释ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.debugToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -139,7 +140,6 @@ namespace DevPython {
             this.sciLogArea = new ScintillaNET.Scintilla();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.toolTip2 = new System.Windows.Forms.ToolTip(this.components);
-            this.toolStripSeparator17 = new System.Windows.Forms.ToolStripSeparator();
             this.menubarMain.SuspendLayout();
             this.controlStatusBar.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -420,6 +420,11 @@ namespace DevPython {
             this.在文件夹中显示ToolStripMenuItem.Size = new System.Drawing.Size(228, 26);
             this.在文件夹中显示ToolStripMenuItem.Text = "在文件夹中显示";
             this.在文件夹中显示ToolStripMenuItem.Click += new System.EventHandler(this.在文件夹中显示ToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator17
+            // 
+            this.toolStripSeparator17.Name = "toolStripSeparator17";
+            this.toolStripSeparator17.Size = new System.Drawing.Size(225, 6);
             // 
             // 批量注释ToolStripMenuItem
             // 
@@ -748,7 +753,7 @@ namespace DevPython {
             this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton1.Name = "toolStripButton1";
             this.toolStripButton1.Size = new System.Drawing.Size(24, 25);
-            this.toolStripButton1.Text = "toolStripButton1";
+            this.toolStripButton1.Text = "上个编辑位置";
             this.toolStripButton1.Click += new System.EventHandler(this.toolStripButton1_Click);
             // 
             // toolStripButton2
@@ -758,7 +763,7 @@ namespace DevPython {
             this.toolStripButton2.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton2.Name = "toolStripButton2";
             this.toolStripButton2.Size = new System.Drawing.Size(24, 25);
-            this.toolStripButton2.Text = "toolStripButton2";
+            this.toolStripButton2.Text = "下个编辑位置";
             this.toolStripButton2.Click += new System.EventHandler(this.toolStripButton2_Click);
             // 
             // toolStripSeparator11
@@ -925,7 +930,7 @@ namespace DevPython {
             this.tabPage1.Controls.Add(this.sciOutputArea);
             this.tabPage1.Location = new System.Drawing.Point(4, 25);
             this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage1.Size = new System.Drawing.Size(835, 177);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "输出";
@@ -945,8 +950,8 @@ namespace DevPython {
             this.tabPage2.Controls.Add(this.listView1);
             this.tabPage2.Location = new System.Drawing.Point(4, 25);
             this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
-            this.tabPage2.Size = new System.Drawing.Size(835, 191);
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage2.Size = new System.Drawing.Size(835, 177);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "变量监视";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -961,7 +966,7 @@ namespace DevPython {
             this.listView1.LabelEdit = true;
             this.listView1.Location = new System.Drawing.Point(3, 3);
             this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(829, 185);
+            this.listView1.Size = new System.Drawing.Size(829, 171);
             this.listView1.TabIndex = 2;
             this.listView1.UseCompatibleStateImageBehavior = false;
             this.listView1.View = System.Windows.Forms.View.Details;
@@ -981,8 +986,8 @@ namespace DevPython {
             this.tabPage3.Controls.Add(this.listView2);
             this.tabPage3.Location = new System.Drawing.Point(4, 25);
             this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
-            this.tabPage3.Size = new System.Drawing.Size(835, 191);
+            this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage3.Size = new System.Drawing.Size(835, 177);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "变量监视（自动）";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -997,7 +1002,7 @@ namespace DevPython {
             this.listView2.LabelEdit = true;
             this.listView2.Location = new System.Drawing.Point(3, 3);
             this.listView2.Name = "listView2";
-            this.listView2.Size = new System.Drawing.Size(829, 185);
+            this.listView2.Size = new System.Drawing.Size(829, 171);
             this.listView2.TabIndex = 3;
             this.listView2.UseCompatibleStateImageBehavior = false;
             this.listView2.View = System.Windows.Forms.View.Details;
@@ -1017,8 +1022,8 @@ namespace DevPython {
             this.tabPage4.Controls.Add(this.sciLogArea);
             this.tabPage4.Location = new System.Drawing.Point(4, 25);
             this.tabPage4.Name = "tabPage4";
-            this.tabPage4.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
-            this.tabPage4.Size = new System.Drawing.Size(835, 191);
+            this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage4.Size = new System.Drawing.Size(835, 177);
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "编译日志";
             this.tabPage4.UseVisualStyleBackColor = true;
@@ -1029,13 +1034,8 @@ namespace DevPython {
             this.sciLogArea.Dock = System.Windows.Forms.DockStyle.Fill;
             this.sciLogArea.Location = new System.Drawing.Point(3, 3);
             this.sciLogArea.Name = "sciLogArea";
-            this.sciLogArea.Size = new System.Drawing.Size(829, 185);
+            this.sciLogArea.Size = new System.Drawing.Size(829, 171);
             this.sciLogArea.TabIndex = 1;
-            // 
-            // toolStripSeparator17
-            // 
-            this.toolStripSeparator17.Name = "toolStripSeparator17";
-            this.toolStripSeparator17.Size = new System.Drawing.Size(225, 6);
             // 
             // Main
             // 

@@ -1,7 +1,6 @@
 D:\Project\DevPython\bin\Release\DevPython.exe.config
 D:\Project\DevPython\bin\Release\DevPython.exe
 D:\Project\DevPython\bin\Release\ScintillaNET.dll
-D:\Project\DevPython\bin\Release\ScintillaNET.xml
 D:\Project\DevPython\obj\x86\Release\DevPython.csprojResolveAssemblyReference.cache
 D:\Project\DevPython\obj\x86\Release\DevPython.About.resources
 D:\Project\DevPython\obj\x86\Release\DevPython.AddWatchDialog.resources
@@ -16,3 +15,5 @@ D:\Project\DevPython\obj\x86\Release\DevPython.ReplaceDialog.resources
 D:\Project\DevPython\obj\x86\Release\DevPython.SaveChangesPrompt.resources
 D:\Project\DevPython\obj\x86\Release\DevPython.csproj.GenerateResource.Cache
 D:\Project\DevPython\obj\x86\Release\DevPython.exe
+D:\Project\DevPython\obj\x86\Release\DevPython.ParameterDialog.resources
+D:\Project\DevPython\bin\Release\ScintillaNET.xml

@@ -1343,17 +1343,18 @@ namespace DevPython
             return true;
         }
 
-        public static void run(String S, Main M, bool Console = false)
+        public static bool compile(String S, Main M)
         {
-            // 编译
-            try {
+            try
+            {
                 M.clearLog();
                 M.printLog("开始编译...\n");
 
                 S += "\n\n"; // newline hack
                 Tokenizer t = new Tokenizer(S);
                 grammar g = Grammar._Grammar;
-                while (true) {
+                while (true)
+                {
                     _node n = parsetok(t, g, 256);
                     if (n != null)
                     {
@@ -1367,17 +1368,62 @@ namespace DevPython
                     }
                     if (t.cur >= S.Length - 3)
                     {
-                        M.printLog("语法分析结束。");
+                        M.printLog("语法分析结束。\n");
                         break;
                     }
                 }
+                
+                String good = "import dis\nimport sys\nfile = open(sys.argv[1],'r',encoding = 'utf8').read()\nbytecode = dis.Bytecode(file)\nfor code in bytecode:\n    if '<' not in code.argrepr:\n        print(code.opname + '\t' + code.argrepr)\n\n        ";
+                System.IO.File.WriteAllText(@".\\__bytecode__.py", good, Encoding.UTF8);
 
+                Process _p = null;
+
+                _p = new Process();
+                _p.StartInfo.UseShellExecute = false;
+                _p.StartInfo.CreateNoWindow = true;
+                _p.StartInfo.RedirectStandardInput = true;
+                _p.StartInfo.RedirectStandardOutput = true;
+                _p.StartInfo.RedirectStandardError = true;
+                _p.StartInfo.FileName = "python";
+                _p.StartInfo.Arguments = " .\\__bytecode__.py " + M.Filename;
+                _p.OutputDataReceived += (s1, e1) => {
+                    if (!string.IsNullOrEmpty(e1.Data))
+                    {
+                        string sData = e1.Data;
+                        M.printLog(sData);
+                        return;
+                    }
+
+                    if (_p == null || _p.HasExited || _p == null)
+                    { // 处理程序退出
+                        if (_p != null)
+                        {
+                            _p.Close();
+                            _p = null;
+                        }
+                        return;
+                    }
+                };
+                _p.Start();
+                _p.BeginOutputReadLine();
+                _p.WaitForExit();
+
+                System.IO.File.Delete(@".\\__bytecode__.py");
+
+                M.printLog("\n字节码生成完成。\n");
             }
-            catch(Exception e)
+            catch (Exception e)
             {
-                M.printOutput("编译器内部错误：\n"+e.ToString());
-                return;
+                M.printOutput("编译器内部错误：\n" + e.ToString());
+                return false;
             }
+            return true;
+        }
+
+        public static void run(String S, Main M, bool Console = false)
+        {
+            // 编译
+            if(!compile(S, M)) return;
 
             // 运行
             M.printOutput("开始运行"+M.Filename+"...\n");
@@ -1387,7 +1433,9 @@ namespace DevPython
         public static void debug(String S, Main M, bool Console=false)
         {
             // 编译
-            try
+            if (!compile(S, M)) return;
+
+            /*try
             {
                 M.clearLog();
                 M.printLog("开始编译...\n");
@@ -1411,7 +1459,7 @@ namespace DevPython
             {
                 M.printOutput("编译器内部错误：\n" + e.ToString());
                 return;
-            }
+            }*/
 
             // 运行并调试
             Process p;
@@ -1439,7 +1487,7 @@ namespace DevPython
             var tt = new Tokenizer(S);
             M.nows2.Clear();
             var count = 0;
-            while (true)
+            for(int i=1; i<3000; i++)
             {
                 var type = tt.get(out name);
                 if (type == EQUAL)
@@ -1497,7 +1545,7 @@ namespace DevPython
                             Thread.Sleep(77);
                             continue;
                         }
-                        M.printLog("found: " + line);
+                        // M.printLog("found: " + line);
 
                         if (line == null) return;
 
@@ -1514,7 +1562,7 @@ namespace DevPython
                             {
                                 lineno = lineno * 10 + line[numStart] - '0';
                             }
-                            M.printLog("当前运行第" + lineno.ToString() + "行。");
+                        //    M.printLog("当前运行第" + lineno.ToString() + "行。");
 
                         }
                         else if(line.StartsWith("-> "))

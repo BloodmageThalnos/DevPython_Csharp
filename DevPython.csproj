@@ -117,6 +117,7 @@
     <Compile Include="Grammar.cs" />
     <Compile Include="Helper.cs" />
     <Compile Include="HelperExtensions.cs" />
+    <Compile Include="LoadResoureDll.cs" />
     <Compile Include="Main.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -234,10 +235,10 @@
     <None Include="Resources\5_17.gif" />
     <None Include="Resources\5_16.gif" />
     <None Include="Resources\5_31.gif" />
-    <Content Include="Resources\python35.dll" />
     <None Include="Resources\Icon1.ico" />
     <None Include="BigIcon.png" />
     <None Include="doc\1.jpg" />
+    <None Include="bin\Release\ScintillaNET.dll" />
     <Content Include="icon.ico" />
   </ItemGroup>
   <ItemGroup>

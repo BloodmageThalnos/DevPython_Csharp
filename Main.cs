@@ -25,10 +25,13 @@ namespace DevPython {
             if (dllName.EndsWith("_resources")) return null;
             System.Resources.ResourceManager rm = new System.Resources.ResourceManager(GetType().Namespace + ".Properties.Resources", Assembly.GetExecutingAssembly());
             byte[] bytes = (byte[])rm.GetObject(dllName);
+            // MessageBox.Show(bytes.Length +" Bad");
             return System.Reflection.Assembly.Load(bytes);
         }
         public Main() {
-            AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
+            //AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
+
+            //LoadResoureDll.RegistDLL();
 
             InitializeComponent();
 
